@@ -27,6 +27,12 @@ body {
 	height: 100vh;
 }
 
+/* @media (max-width: 281px) {
+	#root {
+		padding: 0;
+	}
+} */
+
 #main {
 	height: 100vh;
 }

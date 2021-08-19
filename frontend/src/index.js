@@ -8,10 +8,10 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 
 const theme = createTheme({
 	palette: {
-		// primary: {
-		// 	// Purple and green play nicely together.
-		// 	main: '#fff'
-		// },
+		primary: {
+			// Purple and green play nicely together.
+			main: '#00695f'
+		},
 		secondary: {
 			// This is green.A700 as hex.
 			main: '#fff'
@@ -19,8 +19,10 @@ const theme = createTheme({
 	},
 
 	typography: {
+		fontFamily: 'PT Sans',
 		button: {
-			textTransform: 'none'
+			textTransform: 'none',
+			fontFamily: 'PT Sans'
 		}
 	}
 });

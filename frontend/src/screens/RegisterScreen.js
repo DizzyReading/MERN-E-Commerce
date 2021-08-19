@@ -10,7 +10,6 @@ import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import { css, cx } from '@emotion/css';
 
-
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
@@ -102,7 +101,7 @@ const RegisterScreen = (props) => {
 				</div>
 				<div>
 					<label />
-					<Button variant="contained" type="submit">
+					<Button variant="contained" color="primary" type="submit">
 						Register
 					</Button>
 				</div>

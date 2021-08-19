@@ -113,6 +113,7 @@ const CartScreen = (props) => {
 										<div>
 											<Button
 												variant="contained"
+												color="primary"
 												onClick={() => removeFromCartHandler(item.product)} // <-- here item.product is id
 												sx={{ marginLeft: '8px' }}
 											>
@@ -138,6 +139,7 @@ const CartScreen = (props) => {
 								<li className={css`text-align: center;`}>
 									<Button
 										variant="contained"
+										color="primary"
 										onClick={checkOutHandler}
 										disabled={cartItems.length === 0}
 									>

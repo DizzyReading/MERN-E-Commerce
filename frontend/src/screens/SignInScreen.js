@@ -74,7 +74,7 @@ const SignInScreen = (props) => {
 				</div>
 				<div>
 					<label />
-					<Button variant="contained" type="submit">
+					<Button variant="contained" color="primary" type="submit">
 						Sign In
 					</Button>
 				</div>

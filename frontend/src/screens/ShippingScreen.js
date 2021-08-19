@@ -103,7 +103,7 @@ const ShippingScreen = (props) => {
 				</div>
 				<div>
 					<label />
-					<Button variant="contained" type="submit">
+					<Button variant="contained" color="primary" type="submit">
 						Continue
 					</Button>
 				</div>

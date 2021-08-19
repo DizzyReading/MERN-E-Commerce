@@ -8,53 +8,158 @@ import { RiLogoutCircleRLine } from 'react-icons/ri';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Link } from 'react-router-dom';
+import Popper from '@material-ui/core/Popper';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import MenuList from '@material-ui/core/MenuList';
 
 const Dropdown = ({ signOutHandler, userInfo }) => {
-	const [ anchorEl, setAnchorEl ] = useState(null);
-	const open = Boolean(anchorEl);
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
+	// const [ anchorEl, setAnchorEl ] = useState(null);
+	// const open = Boolean(anchorEl);
+	// const handleClick = (event) => {
+	// 	setAnchorEl(event.currentTarget);
+	// };
+	// const handleClose = () => {
+	// 	setAnchorEl(null);
+	// };
+
+	// return (
+	// 	<div>
+	// 		<Button
+	// 			color="secondary"
+	// 			variant="text"
+	// 			id="basic-button"
+	// 			aria-controls="basic-menu"
+	// 			aria-haspopup="true"
+	// 			aria-expanded={open ? 'true' : undefined}
+	// 			onClick={handleClick}
+	// 		>
+	// 			{userInfo.name}
+	// 			<BsCaretDownFill />
+	// 		</Button>
+	// 		<Button
+	// 			id="basic-menu"
+	// 			anchorEl={anchorEl}
+	// 			open={open}
+	// 			onClose={handleClose}
+	// 			MenuListProps={{
+	// 				'aria-labelledby': 'basic-button'
+	// 			}}
+	// 		>
+	// 			<MenuItem onClick={handleClose}>
+	// 				<ListItemIcon>
+	// 					<CgProfile />
+	// 				</ListItemIcon>{' '}
+	// 				<ListItemText>My Account</ListItemText>
+	// 			</MenuItem>
+	// 			<MenuItem onClick={signOutHandler}>
+	// 				<ListItemIcon>
+	// 					<RiLogoutCircleRLine />
+	// 				</ListItemIcon>
+	// 				<ListItemText>Sign Out</ListItemText>
+	// 			</MenuItem>
+	// 		</Button>
+	// 	</div>
+	// );
+
+	const [ open, setOpen ] = React.useState(false);
+	const anchorRef = React.useRef(null);
+
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
 	};
-	const handleClose = () => {
-		setAnchorEl(null);
+
+	const handleClose = (event) => {
+		if (anchorRef.current && anchorRef.current.contains(event.target)) {
+			return;
+		}
+
+		setOpen(false);
 	};
+
+	function handleListKeyDown(event) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		} else if (event.key === 'Escape') {
+			setOpen(false);
+		}
+	}
+
+	// return focus to the button when we transitioned from !open -> open
+	const prevOpen = React.useRef(open);
+	React.useEffect(
+		() => {
+			if (prevOpen.current === true && open === false) {
+				anchorRef.current.focus();
+			}
+
+			prevOpen.current = open;
+		},
+		[ open ]
+	);
 
 	return (
 		<div>
 			<Button
 				color="secondary"
 				variant="text"
-				id="basic-button"
-				aria-controls="basic-menu"
-				aria-haspopup="true"
+				ref={anchorRef}
+				id="composition-button"
+				aria-controls={open ? 'composition-menu' : undefined}
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}
+				aria-haspopup="true"
+				onClick={handleToggle}
 			>
 				{userInfo.name}
 				<BsCaretDownFill />
 			</Button>
-			<Menu
-				id="basic-menu"
-				anchorEl={anchorEl}
+			<Popper
 				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					'aria-labelledby': 'basic-button'
-				}}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				placement="bottom-start"
+				transition
+				disablePortal
 			>
-				<MenuItem onClick={handleClose}>
-					<ListItemIcon>
-						<CgProfile />
-					</ListItemIcon>{' '}
-					<ListItemText>My Account</ListItemText>
-				</MenuItem>
-				<MenuItem onClick={signOutHandler}>
-					<ListItemIcon>
-						<RiLogoutCircleRLine />
-					</ListItemIcon>
-					<ListItemText>Sign Out</ListItemText>
-				</MenuItem>
-			</Menu>
+				{({ TransitionProps, placement }) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom'
+						}}
+					>
+						<Paper>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="composition-menu"
+									aria-labelledby="composition-button"
+									onKeyDown={handleListKeyDown}
+								>
+									{/* <MenuItem onClick={handleClose}>Profile</MenuItem>
+									<MenuItem onClick={handleClose}>My account</MenuItem>
+									<MenuItem onClick={handleClose}>Logout</MenuItem> */}
+
+									<MenuItem onClick={handleClose}>
+										<ListItemIcon>
+											<CgProfile />
+										</ListItemIcon>{' '}
+										<ListItemText>My Account</ListItemText>
+									</MenuItem>
+									<MenuItem onClick={signOutHandler}>
+										<ListItemIcon>
+											<RiLogoutCircleRLine />
+										</ListItemIcon>
+										<ListItemText>Sign Out</ListItemText>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
 		</div>
 	);
 };

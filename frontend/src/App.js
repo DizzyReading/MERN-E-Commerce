@@ -89,10 +89,13 @@ function App() {
 							</IconButton>
 
 							<Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-								<Link to="/" className="brand" sx={{ flexGrow: 1 }}>
+								<Link to="/" className="brand">
 									Thriftshop
 								</Link>
 							</Typography>
+							<Box sx={{ flexGrow: 1 }} />
+							{/* <Box sx={{ display: { xs: 'none', md: 'flex' } }} /> */}
+
 							<Link to="/cart">
 								<Badge badgeContent={cartItems.length > 0 ? cartItems.length : 0} color={'error'}>
 									<FaShoppingCart

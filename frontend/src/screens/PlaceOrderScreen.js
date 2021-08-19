@@ -276,6 +276,7 @@ const PlaceOrderScreen = (props) => {
 						>
 							<Button
 								variant="contained"
+								color="primary"
 								onClick={placeOrderHandler}
 								disabled={cart.cartItems.length === 0}
 							>

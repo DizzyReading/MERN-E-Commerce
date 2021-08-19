@@ -157,8 +157,8 @@ const addToCartHandler = () => {
                  
                     
                       
-                  <div className="row-1">
-                  <Button variant="contained" onClick={addToCartHandler} sx={{marginTop: "15px"}}>
+                  <div  className={css `margin-top: 10px; display:flex; align-items: center; justify-content: center;`}>
+                  <Button variant="contained" color="primary" onClick={addToCartHandler} sx={{marginTop: "15px"}}>
                     Add To Cart
                   </Button>
                   </div>

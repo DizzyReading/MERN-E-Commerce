@@ -54,21 +54,21 @@ const PaymentScreeen = (props) => {
 					<RadioGroup aria-label="payment" defaultValue="PayPal" name="radio-buttons-group">
 						<FormControlLabel
 							value="PayPal"
-							control={<Radio />}
+							control={<Radio color="primary" />}
 							label="PayPal"
 							required
 							onChange={(e) => setPaymentMethod(e.target.value)}
 						/>
 						<FormControlLabel
 							value="Stripe"
-							control={<Radio />}
+							control={<Radio color="primary" />}
 							label="Stripe"
 							required
 							onChange={(e) => setPaymentMethod(e.target.value)}
 						/>
 					</RadioGroup>
 					<div>
-						<Button variant="contained" type="submit">
+						<Button variant="contained" color="primary" type="submit">
 							Continue
 						</Button>
 					</div>
