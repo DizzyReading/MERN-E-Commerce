@@ -9,7 +9,7 @@ import { register } from '../redux/actions/userAction';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import { css, cx } from '@emotion/css';
-import Alert from '@material-ui/core/Alert';
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
