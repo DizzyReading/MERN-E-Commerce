@@ -48,7 +48,7 @@ const RegisterScreen = (props) => {
 		[ props.history, redirect, userInfo ]
 	);
 
-	console.log('SignInScreen:', props.location.search.split('=')[1]);
+	console.log('RegisterScreen:', props.location.search.split('=')[1]);
 
 	return (
 		<Box>

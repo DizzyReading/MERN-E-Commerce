@@ -165,24 +165,31 @@ ul {
 
 /* Alert */
 
+.loading {
+	display: block !important;
+}
 .success {
 	color: #20a020;
-	margin-left: 18px;
 }
-
 .danger {
 	color: #a02020;
-	margin-left: 18px;
 }
-
 .alert {
 	padding: 1rem;
 	border: 0.1rem solid transparent;
-	border-radius: .5rem;
+	border-radius: 0.5rem;
 }
-
-.alert.show {
-	animation: show_slide 1s ease forwards;
+.alert-info {
+	color: #2020a0;
+	background-color: #e0e0ff;
+}
+.alert-danger {
+	color: #a02020;
+	background-color: #ffe0e0;
+}
+.alert-success {
+	color: #20a020;
+	background-color: #eeffe0;
 }
 
 @keyframes show_slide {

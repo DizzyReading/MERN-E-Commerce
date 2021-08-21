@@ -23,7 +23,7 @@ export const addToCart = (productId, qty) => async (dispatch, getState) => {
 	} catch (error) {
 		console.log('cartActions: addToCart', error);
 	}
-	console.log('getState: addToCart', getState());
+	// console.log('getState: addToCart', getState());
 	localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };
 
@@ -39,7 +39,7 @@ export const removeFromCart = (productId) => async (dispatch, getState) => {
 		console.log('cardActions: removeFromCart', error);
 	}
 
-	console.log('getState: removeFromCart', getState());
+	// console.log('getState: removeFromCart', getState());
 	localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems));
 };
 

@@ -62,6 +62,7 @@ export const signOut = () => (dispatch) => {
 	dispatch({
 		type: USER_SIGNOUT
 	});
-	// document.location.href = '/signin';
+	// localStorage.clear();
+	document.location.href = '/signin';
 	// document.location.href = '#signin';
 };

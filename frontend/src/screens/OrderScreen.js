@@ -4,14 +4,16 @@ import { styled } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
 import { css, cx } from '@emotion/css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
-import { detailsOrder } from '../redux/actions/orderActions';
+import { detailsOrder, payOrder } from '../redux/actions/orderActions';
+import { ORDER_PAY_RESET } from '../redux/constants/orderConstants';
+import { Button } from '@material-ui/core';
+import Spinner from '../components/Spinner';
 
 
 
@@ -35,51 +37,72 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const OrderScreen = (props) => {
-  const [sdkReady, setSdkReady] = useState(false)
 	const orderId = props.match.params.id;
-	const orderDetails = useSelector((state) => state.orderDetails);
+  const [sdkReady, setSdkReady] = useState(false);
 
-	const { order, loading, error } = orderDetails;
-
+  const orderDetails = useSelector((state) => state.orderDetails);
+  const { order, loading, error } = orderDetails;
+  const userSignIn = useSelector((state) => state.userSignIn);
+  const { userInfo } = userSignIn;
+	const orderPay = useSelector((state) => state.orderPay);
+  const {
+    loading: loadingPay,
+    error: errorPay,
+    success: successPay,
+  } = orderPay;
 	const dispatch = useDispatch();
 
 	useEffect(
 		() => {
-      const addPayPalScript = async () => {
-        const {data} = await axios.get('/api/config/paypal')
+			const addPayPalScript = async () => {
+				const { data } = await axios.get('/api/config/paypal');
+				const script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.src = `https://www.paypal.com/sdk/js?client-id=${data}`;
+				script.async = true;
+				script.onload = () => {
+					setSdkReady(true);
+				};
+				document.body.appendChild(script);
+			};
 
-        const script = document.createElement('script');
-        script.type = "text/javascript";
-        script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
-        script.async = true
-        script.onload = () => {
-          setSdkReady(true)
-        }
+			const addRazorPayScript = async () => {
+			
+				const script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.src = "https://checkout.razorpay.com/v1/checkout.js";
+				script.async = true;
+				script.onload = () => {
+					setSdkReady(true)
+				}
+				document.body.appendChild(script);
+			}
 
-        document.body.appendChild(script)
+      if(!order || successPay || (order && order._id !== orderId)) {
 
-      }
-
-      if(!order) {
+				dispatch({type: ORDER_PAY_RESET})
         dispatch(detailsOrder(orderId));
       
       }else {
         if(!order.isPaid) {
-          if(!window.paypal) {
-            addPayPalScript()
+          if(!window.paypal ) {
+            addPayPalScript();				
+					
           }
           else {
             setSdkReady(true)
+						
           }
         }
       }
 
 		},
-		[ dispatch, order, orderId, sdkReady ]
+		[ dispatch, order, orderId, sdkReady, successPay ]
 	);
 
-  const successPaymentHandler = () => {
-    //TODO: dispatch payOrder
+  const successPaymentHandler = (paymentResult) => {
+    
+		dispatch(payOrder(order, paymentResult));
   }
 
 	console.log(order);
@@ -304,9 +327,11 @@ const OrderScreen = (props) => {
 								</li>
 
 							</ul>
+							{errorPay && (<MessageBox variant="danger">{error}</MessageBox>)}
+							{loadingPay && (<p></p>)}
 
               {
-                !order.isPaid && (<div className={css `margin-top: 10px;`}>{ !sdkReady ? (<p>Loading</p>) : (<PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}></PayPalButton>)}</div>)  
+                !order.isPaid && (<div className={css `margin-top: 10px;`}>{ !sdkReady ? (<p><Spinner></Spinner></p>) : (<PayPalButton amount={order.totalPrice} onSuccess={successPaymentHandler}></PayPalButton> )}</div>)  
               }
 						</Card>
 					</div>

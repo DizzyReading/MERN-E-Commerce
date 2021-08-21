@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import orderRouter from './routes/orderRoutes.js';
 import morgan from 'morgan';
 
+import bodyParser from 'body-parser';
+
 dotenv.config();
 
 // express app
@@ -33,6 +35,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+// app.use(cors);
 
 // Routes
 

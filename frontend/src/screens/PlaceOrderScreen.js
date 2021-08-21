@@ -7,7 +7,6 @@ import { css, cx } from '@emotion/css';
 import CheckOutStepper from '../components/CheckOutStepper';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { NativeSelect, FormControl } from '@material-ui/core';
 import { createOrder } from '../redux/actions/orderActions';
 import { useEffect } from 'react';
 import { ORDER_CREATE_RESET } from '../redux/constants/orderConstants';
