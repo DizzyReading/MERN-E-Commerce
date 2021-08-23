@@ -138,15 +138,11 @@ const Dropdown = ({ signOutHandler, userInfo }) => {
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
-									{/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-									<MenuItem onClick={handleClose}>My account</MenuItem>
-									<MenuItem onClick={handleClose}>Logout</MenuItem> */}
-
 									<MenuItem onClick={handleClose}>
 										<ListItemIcon>
 											<CgProfile />
 										</ListItemIcon>{' '}
-										<ListItemText>My Account</ListItemText>
+										<ListItemText>Order History</ListItemText>
 									</MenuItem>
 									<MenuItem onClick={signOutHandler}>
 										<ListItemIcon>
