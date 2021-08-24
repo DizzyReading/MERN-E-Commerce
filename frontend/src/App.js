@@ -30,6 +30,7 @@ import PaymentScreeen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -67,6 +68,10 @@ function App(props) {
 			</List>
 		</Box>
 	);
+
+	const userProfileHandler = () => {
+		document.location.href = '/userprofile';
+	};
 
 	const orderHistoryHandler = () => {
 		document.location.href = '/orderhistory';
@@ -113,6 +118,7 @@ function App(props) {
 							</Link>
 							{userInfo ? (
 								<Dropdown
+									userProfileHandler={userProfileHandler}
 									orderHistoryHandler={orderHistoryHandler}
 									signOutHandler={signOutHandler}
 									userInfo={userInfo}
@@ -140,6 +146,7 @@ function App(props) {
 							<Route path="/product/:id" component={ProductScreen} />
 							<Route path="/order/:id" component={OrderScreen} />
 							<Route path="/orderhistory" component={OrderHistoryScreen} />
+							<Route path="/userprofile" component={UserProfileScreen} />
 							<Route path="/" component={HomeScreen} exact />
 							<Route path="*">
 								<PageNotFound />

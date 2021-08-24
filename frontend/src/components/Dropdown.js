@@ -16,7 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import { css, cx } from '@emotion/css';
 
-const Dropdown = ({ orderHistoryHandler, signOutHandler, userInfo }) => {
+const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
 	const anchorRef = React.useRef(null);
 
@@ -92,6 +92,12 @@ const Dropdown = ({ orderHistoryHandler, signOutHandler, userInfo }) => {
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
+									<MenuItem onClick={userProfileHandler}>
+										<ListItemIcon>
+											<CgProfile />
+										</ListItemIcon>
+										<ListItemText>Profile</ListItemText>
+									</MenuItem>
 									<MenuItem onClick={orderHistoryHandler}>
 										<ListItemIcon>
 											<IoMdGift />

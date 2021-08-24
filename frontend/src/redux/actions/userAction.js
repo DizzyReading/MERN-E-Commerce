@@ -5,9 +5,13 @@ import {
 	USER_SIGNOUT,
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
-	USER_REGISTER_FAILURE
+	USER_REGISTER_FAILURE,
+	USER_DETAILS_REQUEST,
+	USER_DETAILS_SUCCESS,
+	USER_DETAILS_FAILURE
 } from '../constants/userConstant';
 import axios from 'axios';
+import data from '../../data';
 
 export const register = (name, email, password) => async (dispatch) => {
 	dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
@@ -65,4 +69,29 @@ export const signOut = () => (dispatch) => {
 	// localStorage.clear();
 	document.location.href = '/signin';
 	// document.location.href = '#signin';
+};
+
+/************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+export const detailsUser = (userId) => async (dispatch, getState) => {
+	dispatch({ type: USER_DETAILS_REQUEST, payload: userId });
+
+	const { userSignIn: { userInfo } } = getState();
+
+	try {
+		const { data } = await axios.get(`/api/users/${userId}`, {
+			headers: { Authorization: `Bearer ${userInfo.token}` }
+		});
+
+		dispatch({
+			type: USER_DETAILS_SUCCESS,
+			payload: data
+		});
+	} catch (error) {
+		const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+		dispatch({
+			type: USER_DETAILS_FAILURE,
+			error: message
+		});
+	}
 };

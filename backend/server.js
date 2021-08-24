@@ -43,6 +43,8 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/orders', orderRouter);
 
+// PAYPAL
+
 app.get('/api/config/paypal', (req, res) => {
 	res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
