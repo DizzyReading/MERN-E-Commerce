@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { CgProfile } from 'react-icons/cg';
+import { IoMdGift } from 'react-icons/io';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,56 +14,9 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
+import { css, cx } from '@emotion/css';
 
-const Dropdown = ({ signOutHandler, userInfo }) => {
-	// const [ anchorEl, setAnchorEl ] = useState(null);
-	// const open = Boolean(anchorEl);
-	// const handleClick = (event) => {
-	// 	setAnchorEl(event.currentTarget);
-	// };
-	// const handleClose = () => {
-	// 	setAnchorEl(null);
-	// };
-
-	// return (
-	// 	<div>
-	// 		<Button
-	// 			color="secondary"
-	// 			variant="text"
-	// 			id="basic-button"
-	// 			aria-controls="basic-menu"
-	// 			aria-haspopup="true"
-	// 			aria-expanded={open ? 'true' : undefined}
-	// 			onClick={handleClick}
-	// 		>
-	// 			{userInfo.name}
-	// 			<BsCaretDownFill />
-	// 		</Button>
-	// 		<Button
-	// 			id="basic-menu"
-	// 			anchorEl={anchorEl}
-	// 			open={open}
-	// 			onClose={handleClose}
-	// 			MenuListProps={{
-	// 				'aria-labelledby': 'basic-button'
-	// 			}}
-	// 		>
-	// 			<MenuItem onClick={handleClose}>
-	// 				<ListItemIcon>
-	// 					<CgProfile />
-	// 				</ListItemIcon>{' '}
-	// 				<ListItemText>My Account</ListItemText>
-	// 			</MenuItem>
-	// 			<MenuItem onClick={signOutHandler}>
-	// 				<ListItemIcon>
-	// 					<RiLogoutCircleRLine />
-	// 				</ListItemIcon>
-	// 				<ListItemText>Sign Out</ListItemText>
-	// 			</MenuItem>
-	// 		</Button>
-	// 	</div>
-	// );
-
+const Dropdown = ({ orderHistoryHandler, signOutHandler, userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
 	const anchorRef = React.useRef(null);
 
@@ -138,10 +92,10 @@ const Dropdown = ({ signOutHandler, userInfo }) => {
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
-									<MenuItem onClick={handleClose}>
+									<MenuItem onClick={orderHistoryHandler}>
 										<ListItemIcon>
-											<CgProfile />
-										</ListItemIcon>{' '}
+											<IoMdGift />
+										</ListItemIcon>
 										<ListItemText>Order History</ListItemText>
 									</MenuItem>
 									<MenuItem onClick={signOutHandler}>

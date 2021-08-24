@@ -6,7 +6,6 @@ import { userRegisterReducer, userSignInReducer } from './reducers/userReducer';
 import {
 	orderCreateReducer,
 	orderDetailsReducer,
-	orderMine,
 	orderMineListReducer,
 	orderPayReducer
 } from './reducers/orderReducer';

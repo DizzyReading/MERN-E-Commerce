@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
@@ -22,9 +22,11 @@ import TableHead from '@material-ui/core/TableHead';
 import Collapse from '@material-ui/core/Collapse';
 import { css, cx } from '@emotion/css';
 import Typography from '@material-ui/core/Typography';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
+import { listOrderMine } from '../redux/actions/orderActions';
+import { Link } from 'react-router-dom';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -88,42 +90,22 @@ TablePaginationActions.propTypes = {
 	rowsPerPage: PropTypes.number.isRequired
 };
 
-function createData(ID, DATE, TOTAL, PAID, DELIVERED, ACTIONS) {
-	return {
-		ID,
-		DATE,
-		TOTAL,
-		PAID,
-		DELIVERED,
-		ACTIONS,
-		History: [
-			{
-				date: '2020-01-05',
-				customerId: '11091700',
-				amount: 3
-			},
-			{
-				date: '2020-01-02',
-				customerId: 'Anonymous',
-				amount: 1
-			}
-		]
-	};
-}
-
 function Row(props) {
-	const { row, style } = props;
+	const { order } = props;
 	const [ open, setOpen ] = React.useState(false);
 
+	console.log('Row', order);
+	// console.log(order._id);
+	// console.log(props);
 	return (
 		<React.Fragment>
 			<TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-				<TableCell align="center">{row.ID}</TableCell>
-				<TableCell align="center">{row.DATE}</TableCell>
-				<TableCell align="center">{row.TOTAL}</TableCell>
-				<TableCell align="center">{row.PAID}</TableCell>
-				<TableCell align="center">{row.DELIVERED}</TableCell>
-				<TableCell align="center">{row.ACTIONS}</TableCell>
+				<TableCell align="center">{order._id}</TableCell>
+				<TableCell align="center">{order.createdAt.substring(0, 10)}</TableCell>
+				<TableCell align="center">{order.totalPrice.toFixed(2)}</TableCell>
+				<TableCell align="center">{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
+				<TableCell align="center">{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</TableCell>
+				<TableCell align="center">Details</TableCell>
 				<TableCell align="center">
 					<IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
 						{open ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -140,25 +122,25 @@ function Row(props) {
 							<Table size="small" aria-label="purchases">
 								<TableHead>
 									<TableRow>
-										<TableCell align="center">Date</TableCell>
 										<TableCell align="center">Customer</TableCell>
-										<TableCell align="center">Amount</TableCell>
-										<TableCell align="center">Total price ($)</TableCell>
+										<TableCell align="center">Address</TableCell>
+										<TableCell align="center">Postal Code</TableCell>
+										<TableCell align="center">State</TableCell>
+										<TableCell align="center">Actions</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{row.History.map((historyRow) => (
-										<TableRow key={historyRow.date}>
-											<TableCell component="th" scope="row" align="center">
-												{historyRow.date}
-											</TableCell>
-											<TableCell align="center">{historyRow.customerId}</TableCell>
-											<TableCell align="center">{historyRow.amount}</TableCell>
-											<TableCell align="center">
-												{Math.round(historyRow.amount * row.price * 100) / 100}
-											</TableCell>
-										</TableRow>
-									))}
+									<TableCell component="th" scope="row" align="center">
+										{order.shippingAddress.fullName}
+									</TableCell>
+									<TableCell align="center">{order.shippingAddress.address}</TableCell>
+									<TableCell align="center">{order.shippingAddress.postalCode}</TableCell>
+									<TableCell align="center">{order.shippingAddress.state}</TableCell>
+									<TableCell align="center">
+										<Link to={`/order/${order._id}`} className={css`color: blue;`}>
+											See Product
+										</Link>
+									</TableCell>
 								</TableBody>
 							</Table>
 						</Box>
@@ -170,11 +152,11 @@ function Row(props) {
 }
 
 Row.propTypes = {
-	row: PropTypes.shape({
-		ID: PropTypes.string.isRequired,
-		DATE: PropTypes.number.isRequired,
-		TOTAL: PropTypes.number.isRequired,
-		PAID: PropTypes.string.isRequired,
+	order: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		paidAt: PropTypes.number.isRequired,
+		totalPrice: PropTypes.number.isRequired,
+		isPaid: PropTypes.string.isRequired,
 		history: PropTypes.arrayOf(
 			PropTypes.shape({
 				amount: PropTypes.number.isRequired,
@@ -182,38 +164,28 @@ Row.propTypes = {
 				date: PropTypes.string.isRequired
 			})
 		).isRequired,
-		DELIVERED: PropTypes.string.isRequired,
+		isDelivered: PropTypes.string.isRequired,
 		ACTIONS: PropTypes.string.isRequired
 	}).isRequired
 };
 
-const rows = [
-	createData('alt-j', 159, 6.0, 24, 4.0, 'Details'),
-	createData('Local Natives', 237, 9.0, 37, 4.3, 'Details'),
-	createData('The xx', 262, 16.0, 24, 6.0, 'Details'),
-	createData('Syd Matters', 305, 3.7, 67, 4.3, 'Details'),
-	createData('Band of Horses', 356, 16.0, 49, 3.9, 'Details'),
-	createData('K. Flay', 159, 6.0, 24, 3.4, 'Details'),
-	createData('Vampire Weekend', 237, 9.0, 37, 4.3, 'Details'),
-	createData('indigo la End', 262, 16.0, 24, 5.4, 'Details'),
-	createData('Metric', 305, 3.7, 67, 3.3, 'Details'),
-	createData('CHVRCHES', 356, 16.0, 49, 4.9, 'Details'),
-	createData('FOALS', 159, 6.0, 24, 2.2, 'Details'),
-	createData('Iron & Wine', 237, 9.0, 37, 4.3, 'Details'),
-	createData('Metronomy', 262, 16.0, 24, 3.5, 'Details'),
-	createData('Aqualung', 305, 3.7, 67, 4.4, 'Details'),
-	createData('Fleet Foxes', 356, 16.0, 49, 3.2, 'Details')
-];
-
-const OrderHistoryScreen = () => {
+const OrderHistoryScreen = (props) => {
 	const [ page, setPage ] = React.useState(0);
-	const [ rowsPerPage, setRowsPerPage ] = React.useState(5);
+	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
 
 	const orderMineList = useSelector((state) => state.orderMineList);
 	const { loading, error, orders } = orderMineList;
+	const dispatch = useDispatch();
+
+	React.useEffect(
+		() => {
+			dispatch(listOrderMine());
+		},
+		[ dispatch ]
+	);
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -302,31 +274,8 @@ const OrderHistoryScreen = () => {
 						</TableHead>
 						<TableBody>
 							{(rowsPerPage > 0
-								? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								: rows).map((row) => (
-								// <TableRow key={row.name}>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.ID}
-								// 	</TableCell>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.DATE}
-								// 	</TableCell>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.TOTAL}
-								// 	</TableCell>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.PAID}
-								// 	</TableCell>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.DELIVERED}
-								// 	</TableCell>
-								// 	<TableCell style={{ width: 160 }} align="center">
-								// 		{row.ACTIONS}
-								// 	</TableCell>
-								// </TableRow>
-
-								<Row key={row.name} row={row} />
-							))}
+								? orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								: orders).map((order) => <Row key={order._id} order={order} props={props} />)}
 
 							{emptyRows > 0 && (
 								<TableRow style={{ height: 53 * emptyRows }}>
@@ -338,8 +287,8 @@ const OrderHistoryScreen = () => {
 						<TableFooter>
 							<TableRow>
 								<TablePagination
-									rowsPerPageOptions={[ 5, 10, 25, { label: 'All', value: -1 } ]}
-									count={rows.length}
+									rowsPerPageOptions={[ 10, 15, 25, { label: 'All', value: -1 } ]}
+									count={orders.length}
 									rowsPerPage={rowsPerPage}
 									page={page}
 									SelectProps={{

@@ -40,7 +40,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	justifyContent: 'flex-end'
 }));
 
-function App() {
+function App(props) {
 	const [ state, setState ] = useState(false);
 	const cart = useSelector((state) => state.cart);
 	const { cartItems } = cart;
@@ -67,6 +67,10 @@ function App() {
 			</List>
 		</Box>
 	);
+
+	const orderHistoryHandler = () => {
+		document.location.href = '/orderhistory';
+	};
 
 	const signOutHandler = () => {
 		console.log('sign out clicked');
@@ -108,7 +112,11 @@ function App() {
 								</Badge>
 							</Link>
 							{userInfo ? (
-								<Dropdown signOutHandler={signOutHandler} userInfo={userInfo} />
+								<Dropdown
+									orderHistoryHandler={orderHistoryHandler}
+									signOutHandler={signOutHandler}
+									userInfo={userInfo}
+								/>
 							) : (
 								<Link to="/signin">Sign In</Link>
 							)}
