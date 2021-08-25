@@ -31,6 +31,7 @@ import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
+import PrivateRoute from './components/PrivateRoute';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -146,7 +147,7 @@ function App(props) {
 							<Route path="/product/:id" component={ProductScreen} />
 							<Route path="/order/:id" component={OrderScreen} />
 							<Route path="/orderhistory" component={OrderHistoryScreen} />
-							<Route path="/userprofile" component={UserProfileScreen} />
+							<PrivateRoute path="/userprofile" component={UserProfileScreen} />
 							<Route path="/" component={HomeScreen} exact />
 							<Route path="*">
 								<PageNotFound />

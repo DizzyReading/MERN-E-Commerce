@@ -6,9 +6,11 @@ import { styled } from '@material-ui/core/styles';
 import { useState, useEffect } from 'react';
 import { css, cx } from '@emotion/css';
 import { useDispatch, useSelector } from 'react-redux';
-import { detailsUser, signIn } from '../redux/actions/userAction';
+import { detailsUser, signIn, updateUserProfile } from '../redux/actions/userAction';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
+import {  USER_UPDATE_PROFILE_RESET } from '../redux/constants/userConstant';
+import bcrypt from 'bcryptjs';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -20,85 +22,164 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const UserProfileScreen = (props) => {
+	const [ name, setName ] = useState('');
 	const [ email, setEmail ] = useState('');
+
 	const [ password, setPassword ] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [ isError, setIsError ] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [nameError, setNameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
 
-	const redirect = props.location.search ? props.location.search.split('=')[1] : '/';
 
-	const userSignIn = useSelector((state) => state.userSignIn);
-	const { userInfo } = userSignIn;
 
-	const userDetails = useSelector((state) => state.userDetails);
-	const { loading, error, user } = userDetails;
+  const userSignIn = useSelector((state) => state.userSignIn);
+  const { userInfo } = userSignIn;
+  const userDetails = useSelector((state) => state.userDetails);
+  const { loading, error, user } = userDetails;
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const dispatch = useDispatch();
 
-	const dispatch = useDispatch();
+
+  const {
+    success: successUpdate,
+    error: errorUpdate,
+    loading: loadingUpdate,
+  } = userUpdateProfile;
 
 	useEffect(
 		() => {
-			dispatch(detailsUser(userInfo._id));
+      if(!user) {
+        dispatch({type: USER_UPDATE_PROFILE_RESET})
+        dispatch(detailsUser(userInfo._id));
+      }
+      else {
+        setName(user.name);
+        setEmail(user.email)
+      }
+			
 		},
-		[ dispatch, userInfo._id ]
+		[ dispatch, userInfo._id, user]
 	);
 
-	const updateInfoHandler = (e) => {
-		e.preventDefault();
-		//TODO: Dispatch updateProfile Action
-	};
+  const updateInfoHandler = (e) => {
+    e.preventDefault();
 
-	// console.log(userInfo.name);
+    
+   if(password !== confirmPassword) {
+      setIsError(true);
+
+    }
+    else if(user.name === name) {
+      setNameError(true)
+    }
+    else if(user.email === email) {
+        setEmailError(true)
+     
+    }  
+
+    else if(bcrypt.compare(password, user.password, (err, result) => {
+      if(err) {
+        console.log(err);
+      }
+      else if(result) {
+        setPasswordError(true)
+        console.log(true)
+      }
+      else  {
+            dispatch(updateUserProfile({userId: user._id, name, email, password}))
+      }
+     
+    }))
+    {
+    
+      // setPasswordError(true)
+    
+    }
+
+
+
+  };
+
+
+  if(user) {
+    console.log(user.password)
+  console.log(password)
+  }
+  // console.log(user.password)
+  // console.log(password)
+	// console.log(userInfo.email);
+  // console.log(email);
   // console.log(loading)
   // console.log(userDetails)
-  console.log(user)
+  // console.log(user)
+  // console.log(loadingUpdate, errorUpdate, successUpdate)
+  // console.log(userSignIn)
 
 	return (
-		<Box>
+  <Box>
 			<DrawerHeader />
 			<form className="form" onSubmit={updateInfoHandler}>
 				
 				{loading ? <Loading /> : error ? (<MessageBox variant="danger">{error}</MessageBox>) : (
           
           <>
+          {loadingUpdate && <Loading></Loading>}
+          {errorUpdate && <MessageBox variant="danger">{errorUpdate}</MessageBox>}
+          {successUpdate && <MessageBox variant="success">Successfully Updated Profile</MessageBox>}
+       
+          
+
           <div>
 					<h1>User Profile</h1>
 				</div>
           <div>
 					<TextField
+          error={nameError ? true : false}
 						type="text"
 						id="name"
 						label="Enter Name"
 						variant="filled"
-						value={user.name}
-						// onChange={(e) => setEmail(e.target.value)}
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+            helperText={nameError ? 'Please set a new User name' : null}
 					/>
 				</div>
 				<div>
 					<TextField
+          error={emailError ? true : false}
 						type="email"
 						id="email"
 						label="Enter Email"
 						variant="filled"
-						value={user.email}
-						// onChange={(e) => setPassword(e.target.value)}
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+            helperText={emailError ? 'Please set a new Email' : null}
 					/>
 				</div>
 				<div>
 					<TextField
+          error={passwordError ? true : false}
 						type="password"
 						id="password"
 						label="Enter Password"
 						variant="filled"
-
-						// onChange={(e) => setPassword(e.target.value)}
+						onChange={(e) => setPassword(e.target.value)}
+            helperText={passwordError ? 'Please use a new Password' : null}
+            
 					/>
 				</div>
 				<div>
 					<TextField
-						type="confirm-password"
-						id="password"
+          			error={isError ? true : false}
+						type="password"
+						id="confirm-password"
 						label="Confirm Password"
 						variant="filled"
-
-						// onChange={(e) => setPassword(e.target.value)}
+            
+						onChange={(e) => setConfirmPassword(e.target.value)}
+            helperText={isError ? 'Password not matching' : null}
 					/>
 				</div>
 				<div>
