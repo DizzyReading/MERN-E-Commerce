@@ -35,6 +35,7 @@ import PrivateRoute from './components/PrivateRoute';
 import DropDownAdmin from './DropDownAdmin';
 import AdminRoute from './components/AdminRoute';
 import ProductListScreen from './screens/ProductListScreen';
+import UserListScreen from './screens/UserListScreen';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -150,6 +151,7 @@ function App(props) {
 							<Route path="/order/:id" component={OrderScreen} />
 							<Route path="/orderhistory" component={OrderHistoryScreen} />
 							<AdminRoute path="/productlist" component={ProductListScreen} />
+							<AdminRoute path="/userlist" component={UserListScreen} />
 							<PrivateRoute path="/userprofile" component={UserProfileScreen} />
 							<Route path="/" component={HomeScreen} exact />
 							<Route path="*">

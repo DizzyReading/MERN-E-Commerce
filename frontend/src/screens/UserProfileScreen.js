@@ -31,9 +31,6 @@ const UserProfileScreen = (props) => {
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
-
-
-
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignIn;
   const userDetails = useSelector((state) => state.userDetails);

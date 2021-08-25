@@ -25,8 +25,10 @@ import Typography from '@material-ui/core/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
-import { listOrderMine } from '../redux/actions/orderActions';
 import { Link } from 'react-router-dom';
+import { listProducts } from '../redux/actions/productAction';
+import Button from '@material-ui/core/Button';
+import listUsers from '../redux/actions/userAction';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -91,21 +93,30 @@ TablePaginationActions.propTypes = {
 };
 
 function Row(props) {
-	const { order } = props;
+	const { user } = props;
 	const [ open, setOpen ] = React.useState(false);
 
-	console.log('Row', order);
+	console.log('Row', user);
 	// console.log(order._id);
 	// console.log(props);
 	return (
 		<React.Fragment>
 			<TableRow hover sx={{ '& > *': { borderBottom: 'unset' } }}>
-				<TableCell align="center">{order._id}</TableCell>
-				<TableCell align="center">{order.createdAt.substring(0, 10)}</TableCell>
-				<TableCell align="center">{order.totalPrice.toFixed(2)}</TableCell>
-				<TableCell align="center">{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</TableCell>
-				<TableCell align="center">{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'No'}</TableCell>
-				<TableCell align="center">Details</TableCell>
+				<TableCell align="center">{user._id}</TableCell>
+				<TableCell align="center">{user.name}</TableCell>
+				<TableCell align="center">{user.email}</TableCell>
+				<TableCell align="center">{user.isSeller ? 'YES' : 'NO'}</TableCell>
+				<TableCell align="center">{user.isAdmin ? 'YES' : 'NO'}</TableCell>
+				<TableCell align="center">
+					<Button variant="contained" color="primary">
+						Edit
+					</Button>
+				</TableCell>
+				<TableCell>
+					<Button variant="contained" color="primary">
+						Delete
+					</Button>
+				</TableCell>
 				<TableCell align="center">
 					<IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
 						{open ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
@@ -126,22 +137,23 @@ function Row(props) {
 										<TableCell align="center">Address</TableCell>
 										<TableCell align="center">Postal Code</TableCell>
 										<TableCell align="center">State</TableCell>
+
 										<TableCell align="center">Actions</TableCell>
 									</TableRow>
 								</TableHead>
-								<TableBody>
+								{/* <TableBody>
 									<TableCell component="th" scope="row" align="center">
-										{order.shippingAddress.fullName}
+										{product.shippingAddress.fullName}
 									</TableCell>
-									<TableCell align="center">{order.shippingAddress.address}</TableCell>
-									<TableCell align="center">{order.shippingAddress.postalCode}</TableCell>
-									<TableCell align="center">{order.shippingAddress.state}</TableCell>
+									<TableCell align="center">{product.shippingAddress.address}</TableCell>
+									<TableCell align="center">{product.shippingAddress.postalCode}</TableCell>
+									<TableCell align="center">{product.shippingAddress.state}</TableCell>
 									<TableCell align="center">
-										<Link to={`/order/${order._id}`} className={css`color: blue;`}>
+										<Link to={`/order/${product._id}`} className={css`color: blue;`}>
 											See Product
 										</Link>
 									</TableCell>
-								</TableBody>
+								</TableBody> */}
 							</Table>
 						</Box>
 					</Collapse>
@@ -151,23 +163,23 @@ function Row(props) {
 	);
 }
 
-const OrderHistoryScreen = (props) => {
+const UserListScreen = (props) => {
 	const [ page, setPage ] = React.useState(0);
 	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
 
-	const orderMineList = useSelector((state) => state.orderMineList);
-	const { loading, error, orders } = orderMineList;
+	const userList = useSelector((state) => state.userList);
+	const { loading, error, users } = userList;
 	const dispatch = useDispatch();
 
 	React.useEffect(
 		() => {
-			dispatch(listOrderMine());
+			dispatch(listUsers());
 		},
 		[ dispatch ]
 	);
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -187,7 +199,7 @@ const OrderHistoryScreen = (props) => {
 				</div>
 			) : error ? (
 				<MessageBox>{error}</MessageBox>
-			) : (
+			) : users ? (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
 						<TableHead>
@@ -209,7 +221,7 @@ const OrderHistoryScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										DATE
+										NAME
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -219,7 +231,7 @@ const OrderHistoryScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										TOTAL
+										EMAIL
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -229,7 +241,7 @@ const OrderHistoryScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										PAID
+										IS SELLER
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -239,10 +251,10 @@ const OrderHistoryScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										DELIVERED
+										IS ADMIN
 									</p>
 								</TableCell>
-								<TableCell align="center">
+								<TableCell align="right">
 									<p
 										className={css`
 											font-weight: 900;
@@ -260,12 +272,20 @@ const OrderHistoryScreen = (props) => {
 										`}
 									/>
 								</TableCell>
+								<TableCell align="center">
+									<p
+										className={css`
+											font-weight: 900;
+											font-size: 1.3rem;
+										`}
+									/>
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{(rowsPerPage > 0
-								? orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								: orders).map((order) => <Row key={order._id} order={order} props={props} />)}
+								? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								: users).map((user) => <Row key={user._id} user={user} props={props} />)}
 
 							{emptyRows > 0 && (
 								<TableRow style={{ height: 53 * emptyRows }}>
@@ -278,7 +298,7 @@ const OrderHistoryScreen = (props) => {
 							<TableRow>
 								<TablePagination
 									rowsPerPageOptions={[ 10, 15, 25, { label: 'All', value: -1 } ]}
-									count={orders.length}
+									count={users.length}
 									rowsPerPage={rowsPerPage}
 									page={page}
 									SelectProps={{
@@ -295,9 +315,9 @@ const OrderHistoryScreen = (props) => {
 						</TableFooter>
 					</Table>
 				</TableContainer>
-			)}
+			) : null}
 		</div>
 	);
 };
 
-export default OrderHistoryScreen;
+export default UserListScreen;

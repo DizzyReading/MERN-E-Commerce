@@ -11,10 +11,12 @@ import {
 	USER_DETAILS_FAILURE,
 	USER_UPDATE_PROFILE_REQUEST,
 	USER_UPDATE_PROFILE_FAILURE,
-	USER_UPDATE_PROFILE_SUCCESS
+	USER_UPDATE_PROFILE_SUCCESS,
+	USER_LIST_REQUEST,
+	USER_LIST_FAILURE,
+	USER_LIST_SUCCESS
 } from '../constants/userConstant';
 import axios from 'axios';
-import data from '../../data';
 
 export const register = (name, email, password) => async (dispatch) => {
 	dispatch({ type: USER_REGISTER_REQUEST, payload: { email, password } });
@@ -116,3 +118,26 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 		dispatch({ type: USER_UPDATE_PROFILE_FAILURE, payload: message });
 	}
 };
+
+/************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+const listUsers = () => async (dispatch, getState) => {
+	dispatch({ type: USER_LIST_REQUEST });
+	const { userSignIn: { userInfo } } = getState();
+
+	try {
+		const { data } = await axios.get('/api/users', {
+			headers: { Authorization: `Bearer ${userInfo.token}` }
+		});
+
+		dispatch({
+			type: USER_LIST_SUCCESS,
+			payload: data
+		});
+	} catch (error) {
+		const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+		dispatch({ type: USER_LIST_FAILURE, payload: message });
+	}
+};
+
+export default listUsers;

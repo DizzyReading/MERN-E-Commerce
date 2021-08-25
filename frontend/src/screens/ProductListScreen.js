@@ -257,6 +257,14 @@ const ProductListScreen = (props) => {
 										ACTIONS
 									</p>
 								</TableCell>
+								<TableCell align="center">
+									<p
+										className={css`
+											font-weight: 900;
+											font-size: 1.3rem;
+										`}
+									/>
+								</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>

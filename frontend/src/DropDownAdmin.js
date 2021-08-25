@@ -111,7 +111,7 @@ const DropDownAdmin = ({ userInfo }) => {
 										</ListItemIcon>
 										<ListItemText>Orders</ListItemText>
 									</MenuItem>
-									<MenuItem onClick={() => (document.location.href = '/users')}>
+									<MenuItem onClick={() => (document.location.href = '/userlist')}>
 										<ListItemIcon>
 											<FiUsers />
 										</ListItemIcon>
