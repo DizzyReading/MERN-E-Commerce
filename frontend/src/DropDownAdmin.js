@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { CgProfile } from 'react-icons/cg';
-import { IoMdGift } from 'react-icons/io';
-import { BsCaretDownFill } from 'react-icons/bs';
+import { RiProductHuntLine } from 'react-icons/ri';
+import { BiBox } from 'react-icons/bi';
+import { FiUsers } from 'react-icons/fi';
 import { RiAdminLine } from 'react-icons/ri';
-import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { AiOutlineDashboard } from 'react-icons/ai';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Popper from '@material-ui/core/Popper';
@@ -15,7 +15,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 
-const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, userInfo }) => {
+const DropDownAdmin = ({ userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
 	const anchorRef = React.useRef(null);
 
@@ -67,8 +67,8 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 				aria-haspopup="true"
 				onClick={handleToggle}
 			>
-				{userInfo.name}
-				<BsCaretDownFill />
+				Admin
+				<RiAdminLine />
 			</Button>
 			<Popper
 				open={open}
@@ -93,23 +93,29 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
-									<MenuItem onClick={userProfileHandler}>
+									<MenuItem onClick={() => (document.location.href = '/dashboard')}>
 										<ListItemIcon>
-											<CgProfile />
+											<AiOutlineDashboard />
 										</ListItemIcon>
-										<ListItemText>Profile</ListItemText>
+										<ListItemText>Dashboard</ListItemText>
 									</MenuItem>
-									<MenuItem onClick={orderHistoryHandler}>
+									<MenuItem onClick={() => (document.location.href = '/products')}>
 										<ListItemIcon>
-											<IoMdGift />
+											<RiProductHuntLine />
 										</ListItemIcon>
-										<ListItemText>Order History</ListItemText>
+										<ListItemText>Prodcuts</ListItemText>
 									</MenuItem>
-									<MenuItem onClick={signOutHandler}>
+									<MenuItem onClick={() => (document.location.href = '/orders')}>
 										<ListItemIcon>
-											<RiLogoutCircleRLine />
+											<BiBox />
 										</ListItemIcon>
-										<ListItemText>Sign Out</ListItemText>
+										<ListItemText>Orders</ListItemText>
+									</MenuItem>
+									<MenuItem onClick={() => (document.location.href = '/users')}>
+										<ListItemIcon>
+											<FiUsers />
+										</ListItemIcon>
+										<ListItemText>Users</ListItemText>
 									</MenuItem>
 								</MenuList>
 							</ClickAwayListener>
@@ -121,4 +127,4 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 	);
 };
 
-export default Dropdown;
+export default DropDownAdmin;

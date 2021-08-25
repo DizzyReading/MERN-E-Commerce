@@ -12,7 +12,6 @@ import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox';
 import { detailsOrder, payOrder } from '../redux/actions/orderActions';
 import { ORDER_PAY_RESET } from '../redux/constants/orderConstants';
-import { Button } from '@material-ui/core';
 import Spinner from '../components/Spinner';
 
 
@@ -180,17 +179,14 @@ const OrderScreen = (props) => {
 						<li>
 							<Card
 								className={css`
-									/* flex: 1 1 30rem; */
+							
 									margin: 20px 0 20px 0;
 									@media (min-width: 768px) {
 										width: 600px;
 										height: 100%;
 									}
 
-									/* @media (max-width: 768px) {
-								width: 500px;
-								height: 100%;
-							} */
+							
 								`}
 							>
 								<CardContent>
@@ -217,7 +213,7 @@ const OrderScreen = (props) => {
 															`}
 														/>
 													</div>
-													{/* <div className="min-30"> */}
+								
 													<Link
 														to={`/product/${item.product}`}
 														className={css`
@@ -275,7 +271,7 @@ const OrderScreen = (props) => {
 									<div
 										className={css`
 											display: flex;
-											/* flex-wrap: wrap; */
+										
 											justify-content: space-between;
 											align-items: center;
 										`}
@@ -288,7 +284,7 @@ const OrderScreen = (props) => {
 									<div
 										className={css`
 											display: flex;
-											/* flex-wrap: wrap; */
+									
 											justify-content: space-between;
 											align-items: center;
 										`}
@@ -301,7 +297,7 @@ const OrderScreen = (props) => {
 									<div
 										className={css`
 											display: flex;
-											/* flex-wrap: wrap; */
+				
 											justify-content: space-between;
 											align-items: center;
 										`}

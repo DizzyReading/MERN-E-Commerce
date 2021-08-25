@@ -32,7 +32,7 @@ const HomeScreen = (props) => {
 
   }, [dispatch]);
 
-  console.log('error message is ' + error);
+  // console.log('error message is ' + error);
   return ( 
    <Box >
 

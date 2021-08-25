@@ -32,6 +32,8 @@ import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import UserProfileScreen from './screens/UserProfileScreen';
 import PrivateRoute from './components/PrivateRoute';
+import DropDownAdmin from './DropDownAdmin';
+import AdminRoute from './components/AdminRoute';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -70,18 +72,15 @@ function App(props) {
 		</Box>
 	);
 
-	const userProfileHandler = () => {
-		document.location.href = '/userprofile';
-	};
-
-	const orderHistoryHandler = () => {
-		document.location.href = '/orderhistory';
-	};
-
 	const signOutHandler = () => {
 		console.log('sign out clicked');
 		dispatch(signOut());
 	};
+
+	if (userInfo) {
+		console.log(userInfo);
+		console.log(userInfo.name, 'is admin - ', userInfo.is);
+	}
 
 	return (
 		<Router>
@@ -119,14 +118,16 @@ function App(props) {
 							</Link>
 							{userInfo ? (
 								<Dropdown
-									userProfileHandler={userProfileHandler}
-									orderHistoryHandler={orderHistoryHandler}
+									userProfileHandler={() => (document.location.href = '/userprofile')}
+									orderHistoryHandler={() => (document.location.href = '/orderhistory')}
 									signOutHandler={signOutHandler}
 									userInfo={userInfo}
 								/>
 							) : (
 								<Link to="/signin">Sign In</Link>
 							)}
+
+							{userInfo && userInfo.isAdmin === 'true' && <DropDownAdmin userInfo={userInfo} />}
 						</Toolbar>
 					</MuiAppBar>
 
@@ -147,6 +148,7 @@ function App(props) {
 							<Route path="/product/:id" component={ProductScreen} />
 							<Route path="/order/:id" component={OrderScreen} />
 							<Route path="/orderhistory" component={OrderHistoryScreen} />
+							{/* <AdminRoute path="/admin" component={AdminScreen} /> */}
 							<PrivateRoute path="/userprofile" component={UserProfileScreen} />
 							<Route path="/" component={HomeScreen} exact />
 							<Route path="*">
