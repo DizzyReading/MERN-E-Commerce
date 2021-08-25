@@ -99,11 +99,11 @@ const DropDownAdmin = ({ userInfo }) => {
 										</ListItemIcon>
 										<ListItemText>Dashboard</ListItemText>
 									</MenuItem>
-									<MenuItem onClick={() => (document.location.href = '/products')}>
+									<MenuItem onClick={() => (document.location.href = '/productlist')}>
 										<ListItemIcon>
 											<RiProductHuntLine />
 										</ListItemIcon>
-										<ListItemText>Prodcuts</ListItemText>
+										<ListItemText>Productsts</ListItemText>
 									</MenuItem>
 									<MenuItem onClick={() => (document.location.href = '/orders')}>
 										<ListItemIcon>
