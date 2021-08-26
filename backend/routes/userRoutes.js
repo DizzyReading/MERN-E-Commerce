@@ -98,10 +98,6 @@ userRouter.put(
 				user.seller.description = req.body.sellerDescription || user.seller.description;
 			}
 			if (req.body.password) {
-				// if (bcrypt.compare(user.password, req.body.password)) {
-				// 	res.status(401).send({ message: 'Use a new password.' });
-				// } else
-
 				user.password = bcrypt.hashSync(req.body.password, 12);
 			}
 			const updatedUser = await user.save();
@@ -123,6 +119,25 @@ userRouter.get(
 		const users = await User.find({});
 
 		res.send(users);
+	})
+);
+
+userRouter.delete(
+	'/:id',
+	isAuth,
+	isAdmin,
+	expressAsyncHandler(async (req, res) => {
+		const user = await User.findById(req.params.id);
+		if (user) {
+			if (user.email === 'odnir@example.com') {
+				res.status(400).send({ message: 'Can Not Delete Admin User' });
+				return;
+			}
+			const deleteUser = await user.remove();
+			res.send({ message: 'User Deleted', user: deleteUser });
+		} else {
+			res.status(404).send({ message: 'User Not Found' });
+		}
 	})
 );
 

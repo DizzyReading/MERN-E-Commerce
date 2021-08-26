@@ -13,6 +13,8 @@ import MessageBox from '../components/MessageBox';
 import { detailsOrder, payOrder } from '../redux/actions/orderActions';
 import { ORDER_PAY_RESET } from '../redux/constants/orderConstants';
 import Spinner from '../components/Spinner';
+import swal from 'sweetalert';
+
 
 
 
@@ -65,22 +67,13 @@ const OrderScreen = (props) => {
 				document.body.appendChild(script);
 			};
 
-			const addRazorPayScript = async () => {
-			
-				const script = document.createElement('script');
-				script.type = 'text/javascript';
-				script.src = "https://checkout.razorpay.com/v1/checkout.js";
-				script.async = true;
-				script.onload = () => {
-					setSdkReady(true)
-				}
-				document.body.appendChild(script);
-			}
+		
 
       if(!order || successPay || (order && order._id !== orderId)) {
 
 				dispatch({type: ORDER_PAY_RESET})
         dispatch(detailsOrder(orderId));
+				
       
       }else {
         if(!order.isPaid) {
@@ -102,6 +95,24 @@ const OrderScreen = (props) => {
   const successPaymentHandler = (paymentResult) => {
     
 		dispatch(payOrder(order, paymentResult));
+		// swal("Order Successful!", "", "success");
+		// 		swal.close()
+
+		swal({
+			title: 'Order Successful!',
+			icon: 'success',
+		
+		})
+			.then((res) => {
+			if(res) {
+				console.log("Order Successful")
+			}
+			})
+			.catch((error) => {
+				swal('Oops!', 'Something went wrong!', 'error');
+			})
+
+						swal.close()
   }
 
 	console.log(order);
@@ -258,7 +269,7 @@ const OrderScreen = (props) => {
 									<div
 										className={css`
 											display: flex;
-											/* flex-wrap: wrap; */
+								
 											justify-content: space-between;
 											align-items: center;
 										`}

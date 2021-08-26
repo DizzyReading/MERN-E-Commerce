@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
@@ -28,7 +28,8 @@ import MessageBox from '../components/MessageBox';
 import { Link } from 'react-router-dom';
 import { listProducts } from '../redux/actions/productAction';
 import Button from '@material-ui/core/Button';
-import listUsers from '../redux/actions/userAction';
+import { deleteUser, listUsers } from '../redux/actions/userAction';
+import swal from 'sweetalert';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -93,12 +94,10 @@ TablePaginationActions.propTypes = {
 };
 
 function Row(props) {
-	const { user } = props;
+	const { user, deleteUserHandler } = props;
 	const [ open, setOpen ] = React.useState(false);
+	const dispatch = useDispatch();
 
-	console.log('Row', user);
-	// console.log(order._id);
-	// console.log(props);
 	return (
 		<React.Fragment>
 			<TableRow hover sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -113,7 +112,7 @@ function Row(props) {
 					</Button>
 				</TableCell>
 				<TableCell>
-					<Button variant="contained" color="primary">
+					<Button variant="contained" color="primary" onClick={() => deleteUserHandler(user)}>
 						Delete
 					</Button>
 				</TableCell>
@@ -167,6 +166,9 @@ const UserListScreen = (props) => {
 	const [ page, setPage ] = React.useState(0);
 	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
 
+	const userDelete = useSelector((state) => state.userDelete);
+	const { loading: loadingDelete, error: errorDelete, success: successDelete } = userDelete;
+
 	const userList = useSelector((state) => state.userList);
 	const { loading, error, users } = userList;
 	const dispatch = useDispatch();
@@ -175,8 +177,40 @@ const UserListScreen = (props) => {
 		() => {
 			dispatch(listUsers());
 		},
-		[ dispatch ]
+		[ dispatch, successDelete ]
 	);
+
+	const deleteUserHandler = (user) => {
+		const string = 'clicked!';
+		console.log(string, user);
+
+		if (user.isAdmin) {
+			swal('Cannot Delete Admin User', '', 'warning');
+		} else {
+			string === 'clicked!'
+				? swal({
+						title: 'Are you sure?',
+						text: 'Once deleted, you will not be able to recover this imaginary file!',
+						icon: 'warning',
+						buttons: true,
+						dangerMode: true
+					})
+						.then((willDelete) => {
+							if (willDelete) {
+								dispatch(deleteUser(user._id));
+								swal('Poof! Your imaginary file has been deleted!', {
+									icon: 'success'
+								});
+							} else {
+								swal('Your imaginary file is safe!');
+							}
+						})
+						.catch((error) => {
+							swal('Oops!', 'Something went wrong!', 'error');
+						})
+				: console.log('Not working');
+		}
+	};
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
@@ -190,9 +224,13 @@ const UserListScreen = (props) => {
 		setPage(0);
 	};
 
+	console.log(successDelete);
+
 	return (
 		<div>
 			<DrawerHeader />
+			{loadingDelete && <Loading />}
+
 			{loading ? (
 				<div className="loader-div">
 					<Loading />
@@ -285,7 +323,9 @@ const UserListScreen = (props) => {
 						<TableBody>
 							{(rowsPerPage > 0
 								? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								: users).map((user) => <Row key={user._id} user={user} props={props} />)}
+								: users).map((user) => (
+								<Row key={user._id} user={user} props={props} deleteUserHandler={deleteUserHandler} />
+							))}
 
 							{emptyRows > 0 && (
 								<TableRow style={{ height: 53 * emptyRows }}>

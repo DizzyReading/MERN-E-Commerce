@@ -81,7 +81,7 @@ function App(props) {
 
 	if (userInfo) {
 		console.log(userInfo);
-		console.log(userInfo.name, 'is admin - ', userInfo.is);
+		console.log(userInfo.name, 'is admin - ', userInfo.isAdmin);
 	}
 
 	return (
@@ -129,7 +129,7 @@ function App(props) {
 								<Link to="/signin">Sign In</Link>
 							)}
 
-							{userInfo && userInfo.isAdmin === 'true' && <DropDownAdmin userInfo={userInfo} />}
+							{userInfo && userInfo.isAdmin && <DropDownAdmin userInfo={userInfo} />}
 						</Toolbar>
 					</MuiAppBar>
 

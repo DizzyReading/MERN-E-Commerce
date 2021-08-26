@@ -191,7 +191,7 @@ const ProductListScreen = (props) => {
 					<Loading />
 				</div>
 			) : error ? (
-				<MessageBox>{error}</MessageBox>
+				<MessageBox variant="danger">{error}</MessageBox>
 			) : products ? (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
