@@ -14,6 +14,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
+import { css, cx } from '@emotion/css';
 
 const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
@@ -68,7 +69,7 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 				onClick={handleToggle}
 			>
 				{userInfo.name}
-				<BsCaretDownFill />
+				<BsCaretDownFill className={css`margin-left: 3px;`} />
 			</Button>
 			<Popper
 				open={open}
@@ -93,7 +94,7 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
-									<MenuItem onClick={userProfileHandler}>
+									<MenuItem onClick={() => (document.location.href = '/userprofile')}>
 										<ListItemIcon>
 											<CgProfile />
 										</ListItemIcon>

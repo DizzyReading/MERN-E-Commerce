@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import Product from '../components/Product'
 import { styled } from '@material-ui/core/styles';
@@ -7,6 +8,8 @@ import Loading from '../components/Loading';
 import MessageBox from '../components/MessageBox'
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../redux/actions/productAction';
+import Carousel from '../components/Carousel';
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -26,7 +29,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    dispatch(listProducts()); // fetching data from backend
+    dispatch(listProducts({})); // empty object passed inside means we dont want any fitlters and want all products
 
     console.log(productList);
 
@@ -54,6 +57,8 @@ const HomeScreen = (props) => {
        <>
        <DrawerHeader />
          <DrawerHeader />
+         {/* <ParallaxCarousel></ParallaxCarousel> */}
+         <Carousel></Carousel>
 
          <Grid id="grid-container" container spacing={4} >
            {products.map(product => (

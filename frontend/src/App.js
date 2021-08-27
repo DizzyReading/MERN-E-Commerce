@@ -36,6 +36,10 @@ import DropDownAdmin from './DropDownAdmin';
 import AdminRoute from './components/AdminRoute';
 import ProductListScreen from './screens/ProductListScreen';
 import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/userEditScreen';
+import DropDownSeller from './screens/DropDownSeller';
+import SellerRoute from './components/SellerRoute';
+import OrderListScreen from './screens/OrderListScreen';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -99,7 +103,6 @@ function App(props) {
 							>
 								<HiOutlineMenu />
 							</IconButton>
-
 							<Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
 								<Link to="/" className="brand">
 									Thriftshop
@@ -107,7 +110,6 @@ function App(props) {
 							</Typography>
 							<Box sx={{ flexGrow: 1 }} />
 							{/* <Box sx={{ display: { xs: 'none', md: 'flex' } }} /> */}
-
 							<Link to="/cart">
 								<Badge badgeContent={cartItems.length > 0 ? cartItems.length : 0} color={'error'}>
 									<FaShoppingCart
@@ -128,7 +130,7 @@ function App(props) {
 							) : (
 								<Link to="/signin">Sign In</Link>
 							)}
-
+							{userInfo && userInfo.isSeller && <DropDownSeller userInfo={userInfo} />}
 							{userInfo && userInfo.isAdmin && <DropDownAdmin userInfo={userInfo} />}
 						</Toolbar>
 					</MuiAppBar>
@@ -150,9 +152,14 @@ function App(props) {
 							<Route path="/product/:id" component={ProductScreen} />
 							<Route path="/order/:id" component={OrderScreen} />
 							<Route path="/orderhistory" component={OrderHistoryScreen} />
-							<AdminRoute path="/productlist" component={ProductListScreen} />
+							<AdminRoute path="/user/:id/edit" component={UserEditScreen} />
+							<AdminRoute path="/productlist" component={ProductListScreen} exact />
+							<AdminRoute path="/orderlist" component={OrderListScreen} exact />
 							<AdminRoute path="/userlist" component={UserListScreen} />
 							<PrivateRoute path="/userprofile" component={UserProfileScreen} />
+							<SellerRoute path="/productlist/seller" component={ProductListScreen} />
+
+							<SellerRoute path="/orderlist/seller" component={OrderListScreen} />
 							<Route path="/" component={HomeScreen} exact />
 							<Route path="*">
 								<PageNotFound />

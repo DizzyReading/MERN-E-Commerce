@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
@@ -28,9 +28,7 @@ import MessageBox from '../components/MessageBox';
 import { Link } from 'react-router-dom';
 import { listProducts } from '../redux/actions/productAction';
 import Button from '@material-ui/core/Button';
-import { deleteUser, listUsers } from '../redux/actions/userAction';
-import swal from 'sweetalert';
-import { USER_DELETE_RESET, USER_DETAILS_RESET } from '../redux/constants/userConstant';
+import { listorders } from '../redux/actions/orderActions';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
@@ -95,28 +93,31 @@ TablePaginationActions.propTypes = {
 };
 
 function Row(props) {
-	const { user, deleteUserHandler } = props;
+	const { order, deleteOrderHandler } = props;
 	const [ open, setOpen ] = React.useState(false);
+
+	// console.log('Row', order);
 
 	return (
 		<React.Fragment>
 			<TableRow hover sx={{ '& > *': { borderBottom: 'unset' } }}>
-				<TableCell align="center">{user._id}</TableCell>
-				<TableCell align="center">{user.name}</TableCell>
-				<TableCell align="center">{user.email}</TableCell>
-				<TableCell align="center">{user.isSeller ? 'YES' : 'NO'}</TableCell>
-				<TableCell align="center">{user.isAdmin ? 'YES' : 'NO'}</TableCell>
+				<TableCell align="center">{order._id}</TableCell>
+				<TableCell align="center">{order.user}</TableCell>
+				<TableCell align="center">{order.createdAt.substring(0, 10)}</TableCell>
+				<TableCell align="center">{'$ ' + order.totalPrice.toFixed(2)}</TableCell>
+				<TableCell align="center">{order.isPaid ? order.paidAt.substring(0, 10) : 'NO'}</TableCell>
+				<TableCell align="center">{order.isDelivered ? order.deliveredAt.substring(0, 10) : 'NO'}</TableCell>
 				<TableCell align="center">
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={() => (document.location.href = `/user/${user._id}/edit`)}
+						onClick={() => (document.location.href = `/order/${order._id}/edit`)}
 					>
-						Edit
+						Details
 					</Button>
 				</TableCell>
 				<TableCell>
-					<Button variant="contained" color="primary" onClick={() => deleteUserHandler(user)}>
+					<Button variant="contained" color="primary" onClick={() => deleteOrderHandler(order)}>
 						Delete
 					</Button>
 				</TableCell>
@@ -140,7 +141,6 @@ function Row(props) {
 										<TableCell align="center">Address</TableCell>
 										<TableCell align="center">Postal Code</TableCell>
 										<TableCell align="center">State</TableCell>
-
 										<TableCell align="center">Actions</TableCell>
 									</TableRow>
 								</TableHead>
@@ -166,59 +166,14 @@ function Row(props) {
 	);
 }
 
-const UserListScreen = (props) => {
+const OrderListScreen = (props) => {
 	const [ page, setPage ] = React.useState(0);
-	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
-
-	const userDelete = useSelector((state) => state.userDelete);
-	const { loading: loadingDelete, error: errorDelete, success: successDelete } = userDelete;
-
-	const userList = useSelector((state) => state.userList);
-	const { loading, error, users } = userList;
-	const dispatch = useDispatch();
-
-	React.useEffect(
-		() => {
-			dispatch(listUsers());
-			dispatch({ type: USER_DETAILS_RESET });
-		},
-		[ dispatch, successDelete ]
-	);
-
-	const deleteUserHandler = (user) => {
-		const string = 'clicked!';
-		console.log(string, user);
-
-		if (user.isAdmin) {
-			swal('Cannot Delete Admin User', '', 'info');
-		} else {
-			string === 'clicked!'
-				? swal({
-						title: 'Are you sure?',
-						text: 'Once deleted, user will be wiped out forever.',
-						icon: 'warning',
-						buttons: true,
-						dangerMode: true
-					})
-						.then((willDelete) => {
-							if (willDelete) {
-								dispatch(deleteUser(user._id));
-								swal('Poof! User Deleted!', {
-									icon: 'success'
-								});
-							} else {
-								swal('Canceled Operation', 'User is safe 😮‍💨', 'info');
-							}
-						})
-						.catch((error) => {
-							swal('Oops!', 'Something went wrong!', 'error');
-						})
-				: console.log('Not working');
-		}
-	};
+	const [ rowsPerPage, setRowsPerPage ] = React.useState(5);
+	const orderList = useSelector((state) => state.orderList);
+	const { loading, error, orders } = orderList;
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+	const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -229,20 +184,29 @@ const UserListScreen = (props) => {
 		setPage(0);
 	};
 
-	console.log(successDelete);
+	const dispatch = useDispatch();
+
+	React.useEffect(
+		() => {
+			dispatch(listorders());
+		},
+		[ dispatch ]
+	);
+
+	const deleteOrderHandler = (event) => {
+		//TODO: dispatch deleteOrder
+	};
 
 	return (
 		<div>
 			<DrawerHeader />
-			{loadingDelete && <Loading />}
-
 			{loading ? (
 				<div className="loader-div">
 					<Loading />
 				</div>
 			) : error ? (
-				<MessageBox>{error}</MessageBox>
-			) : users ? (
+				<MessageBox variant="danger">{error}</MessageBox>
+			) : orders ? (
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 700 }} aria-label="custom pagination table">
 						<TableHead>
@@ -264,7 +228,7 @@ const UserListScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										NAME
+										USER
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -274,7 +238,7 @@ const UserListScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										EMAIL
+										DATE
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -284,7 +248,7 @@ const UserListScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										IS SELLER
+										TOTAL
 									</p>
 								</TableCell>
 								<TableCell align="center">
@@ -294,7 +258,17 @@ const UserListScreen = (props) => {
 											font-size: 1.2rem;
 										`}
 									>
-										IS ADMIN
+										PAID
+									</p>
+								</TableCell>
+								<TableCell align="center">
+									<p
+										className={css`
+											font-weight: 900;
+											font-size: 1.3rem;
+										`}
+									>
+										DELIVERED
 									</p>
 								</TableCell>
 								<TableCell align="right">
@@ -327,9 +301,14 @@ const UserListScreen = (props) => {
 						</TableHead>
 						<TableBody>
 							{(rowsPerPage > 0
-								? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								: users).map((user) => (
-								<Row key={user._id} user={user} props={props} deleteUserHandler={deleteUserHandler} />
+								? orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								: orders).map((order) => (
+								<Row
+									key={order._id}
+									order={order}
+									deleteOrderHandler={deleteOrderHandler}
+									props={props}
+								/>
 							))}
 
 							{emptyRows > 0 && (
@@ -342,8 +321,9 @@ const UserListScreen = (props) => {
 						<TableFooter>
 							<TableRow>
 								<TablePagination
-									rowsPerPageOptions={[ 10, 15, 25, { label: 'All', value: -1 } ]}
-									count={users.length}
+									rowsPerPageOptions={[ 5, 10, 25, { label: 'All', value: -1 } ]}
+									colSpan={3}
+									count={orders.length}
 									rowsPerPage={rowsPerPage}
 									page={page}
 									SelectProps={{
@@ -365,4 +345,4 @@ const UserListScreen = (props) => {
 	);
 };
 
-export default UserListScreen;
+export default OrderListScreen;

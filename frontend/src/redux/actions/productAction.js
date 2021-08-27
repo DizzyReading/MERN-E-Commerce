@@ -9,13 +9,13 @@ import {
 
 import axios from 'axios';
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = ({ seller = '' }) => async (dispatch) => {
 	dispatch({
 		type: PRODUCT_LIST_REQUEST
 	});
 
 	try {
-		const { data } = await axios.get('/api/products');
+		const { data } = await axios.get(`/api/products?seller=${seller}`);
 		dispatch({
 			type: PRODUCT_LIST_SUCCESS,
 			payload: data

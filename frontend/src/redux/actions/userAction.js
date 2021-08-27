@@ -17,7 +17,10 @@ import {
 	USER_LIST_SUCCESS,
 	USER_DELETE_REQUEST,
 	USER_DELETE_SUCCESS,
-	USER_DELETE_FAILURE
+	USER_DELETE_FAILURE,
+	USER_UPDATE_REQUEST,
+	USER_UPDATE_SUCCESS,
+	USER_UPDATE_FAILURE
 } from '../constants/userConstant';
 import axios from 'axios';
 
@@ -164,5 +167,21 @@ export const deleteUser = (userId) => async (dispatch, getState) => {
 			type: USER_DELETE_FAILURE,
 			payload: message
 		});
+	}
+};
+
+/************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+export const updateUser = (user) => async (dispatch, getState) => {
+	dispatch({ type: USER_UPDATE_REQUEST, payload: user });
+	const { userSignIn: { userInfo } } = getState();
+	try {
+		const { data } = await axios.put(`/api/users/${user._id}`, user, {
+			headers: { Authorization: `Bearer ${userInfo.token}` }
+		});
+		dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+	} catch (error) {
+		const message = error.response && error.response.data.message ? error.response.data.message : error.message;
+		dispatch({ type: USER_UPDATE_FAILURE, payload: message });
 	}
 };

@@ -23,15 +23,15 @@ body {
 }
 
 #root {
-	padding: 1rem;
+	padding: 5rem;
 	height: 100vh;
 }
 
-/* @media (max-width: 281px) {
+@media (max-width: 415px) {
 	#root {
-		padding: 0;
+		padding: 1rem;
 	}
-} */
+}
 
 #main {
 	height: 100vh;

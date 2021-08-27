@@ -25,12 +25,26 @@ const UserProfileScreen = (props) => {
 	const [ name, setName ] = useState('');
 	const [ email, setEmail ] = useState('');
 
+  //USER
+
 	const [ password, setPassword ] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [ isError, setIsError ] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [nameError, setNameError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
+
+  //SELLER
+
+  const [sellerName, setSellerName] = useState();
+  const [sellerLogo, setSellerLogo] = useState();
+  const [sellerDescription, setSellerDescription] = useState();
+
+
+
+
+
+
   const userSignIn = useSelector((state) => state.userSignIn);
   const { userInfo } = userSignIn;
   const userDetails = useSelector((state) => state.userDetails);
@@ -54,6 +68,12 @@ const UserProfileScreen = (props) => {
       else {
         setName(user.name);
         setEmail(user.email)
+        if(user.seller) {
+         setSellerName(user.seller.name)
+         setSellerLogo(user.seller.logo)
+         setSellerDescription(user.seller.description)
+
+        }
       }
 			
 		},
@@ -85,18 +105,13 @@ const UserProfileScreen = (props) => {
         console.log(true)
       }
       else  {
-            dispatch(updateUserProfile({userId: user._id, name, email, password}))
+            dispatch(updateUserProfile({userId: user._id, name, email, password, sellerName, sellerLogo, sellerDescription}))
       }
      
     }))
     {
     
-      // setPasswordError(true)
-    
     }
-
-
-
   };
 
 
@@ -129,7 +144,7 @@ const UserProfileScreen = (props) => {
           
 
           <div>
-					<h1>User Profile</h1>
+					<h2 className={css`text-align: center;`}>User Profile</h2>
 				</div>
           <div>
 					<TextField
@@ -179,6 +194,55 @@ const UserProfileScreen = (props) => {
             helperText={isError ? 'Password not matching' : null}
 					/>
 				</div>
+        {
+          user.isSeller && (
+            <>
+            <h2 className={css `text-align: center;`}>Seller</h2>
+            	<div>
+					<TextField
+          			// error={isError ? true : false}
+						type="text"
+						id="seller-name"
+						label="Enter Name"
+						variant="filled"
+            value={sellerName}
+            
+						onChange={(e) => setSellerName(e.target.value)}
+            // helperText={isError ? 'Password not matching' : null}
+					/>
+				</div>
+
+        <div>
+					<TextField
+          			// error={isError ? true : false}
+						type="text"
+						id="seller-logo"
+						label="Enter Logo"
+						variant="filled"
+            value={sellerLogo}
+            
+						onChange={(e) => setSellerLogo(e.target.value)}
+            // helperText={isError ? 'Password not matching' : null}
+					/>
+				</div>
+
+        <div>
+					<TextField
+          			// error={isError ? true : false}
+						type="text"
+						id="seller-description"
+						label="Enter Seller Description"
+						variant="filled"
+            value={sellerDescription}
+						onChange={(e) => setSellerDescription(e.target.value)}
+            // helperText={isError ? 'Password not matching' : null}
+					/>
+				</div>
+
+       
+            </>
+          )
+        }
 				<div>
 					<label />
 					<Button variant="contained" color="primary" type="submit">

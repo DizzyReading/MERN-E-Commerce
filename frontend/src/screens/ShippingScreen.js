@@ -69,6 +69,7 @@ const ShippingScreen = (props) => {
 						value={address}
 						variant="filled"
 						onChange={(e) => setAddress(e.target.value)}
+						required
 					/>
 				</div>
 				<div>
@@ -79,6 +80,7 @@ const ShippingScreen = (props) => {
 						value={city}
 						variant="filled"
 						onChange={(e) => setCity(e.target.value)}
+						required
 					/>
 				</div>
 				<div>
@@ -89,6 +91,7 @@ const ShippingScreen = (props) => {
 						value={postalCode}
 						variant="filled"
 						onChange={(e) => setPostalCode(e.target.value)}
+						required
 					/>
 				</div>
 				<div>
@@ -99,6 +102,7 @@ const ShippingScreen = (props) => {
 						value={state}
 						variant="filled"
 						onChange={(e) => setState(e.target.value)}
+						required
 					/>
 				</div>
 				<div>

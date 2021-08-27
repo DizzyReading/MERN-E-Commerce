@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { RiProductHuntLine } from 'react-icons/ri';
 import { BiBox } from 'react-icons/bi';
 import { FiUsers } from 'react-icons/fi';
-import { RiAdminLine } from 'react-icons/ri';
+import { SiSellfy } from 'react-icons/si';
 import { AiOutlineDashboard } from 'react-icons/ai';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,8 +14,9 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
+import { css, cx } from '@emotion/css';
 
-const DropDownAdmin = ({ userInfo }) => {
+const DropDownSeller = ({ userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
 	const anchorRef = React.useRef(null);
 
@@ -67,8 +68,8 @@ const DropDownAdmin = ({ userInfo }) => {
 				aria-haspopup="true"
 				onClick={handleToggle}
 			>
-				Admin
-				<RiAdminLine />
+				Seller
+				<SiSellfy className={css`margin-left: 3px;`} />
 			</Button>
 			<Popper
 				open={open}
@@ -93,29 +94,17 @@ const DropDownAdmin = ({ userInfo }) => {
 									aria-labelledby="composition-button"
 									onKeyDown={handleListKeyDown}
 								>
-									<MenuItem onClick={() => (document.location.href = '/dashboard')}>
-										<ListItemIcon>
-											<AiOutlineDashboard />
-										</ListItemIcon>
-										<ListItemText>Dashboard</ListItemText>
-									</MenuItem>
-									<MenuItem onClick={() => (document.location.href = '/productlist')}>
+									<MenuItem onClick={() => (document.location.href = '/productlist/seller')}>
 										<ListItemIcon>
 											<RiProductHuntLine />
 										</ListItemIcon>
-										<ListItemText>Productsts</ListItemText>
+										<ListItemText>Products</ListItemText>
 									</MenuItem>
-									<MenuItem onClick={() => (document.location.href = '/orderlist')}>
+									<MenuItem onClick={() => (document.location.href = '/orderlist/seller')}>
 										<ListItemIcon>
 											<BiBox />
 										</ListItemIcon>
 										<ListItemText>Orders</ListItemText>
-									</MenuItem>
-									<MenuItem onClick={() => (document.location.href = '/userlist')}>
-										<ListItemIcon>
-											<FiUsers />
-										</ListItemIcon>
-										<ListItemText>Users</ListItemText>
 									</MenuItem>
 								</MenuList>
 							</ClickAwayListener>
@@ -127,4 +116,4 @@ const DropDownAdmin = ({ userInfo }) => {
 	);
 };
 
-export default DropDownAdmin;
+export default DropDownSeller;

@@ -1,4 +1,3 @@
-import { PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from '../constants/productConstants';
 import {
 	USER_SIGNIN_REQUEST,
 	USER_SIGNIN_SUCCESS,
@@ -20,7 +19,12 @@ import {
 	USER_DELETE_REQUEST,
 	USER_DELETE_SUCCESS,
 	USER_DELETE_FAILURE,
-	USER_DELETE_RESET
+	USER_DELETE_RESET,
+	USER_UPDATE_REQUEST,
+	USER_UPDATE_SUCCESS,
+	USER_UPDATE_FAILURE,
+	USER_UPDATE_RESET,
+	USER_DETAILS_RESET
 } from '../constants/userConstant';
 
 export const userRegisterReducer = (state = {}, action) => {
@@ -104,6 +108,8 @@ export const userDetailsReducer = (state = { loading: true }, action) => {
 				...state,
 				error: action.payload
 			};
+		case USER_DETAILS_RESET:
+			return {};
 
 		default:
 			return state;
@@ -181,6 +187,23 @@ export const userDeleteReducer = (state = {}, action) => {
 		case USER_DELETE_RESET:
 			return {};
 
+		default:
+			return state;
+	}
+};
+
+/******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+export const userUpdateReducer = (state = {}, action) => {
+	switch (action.type) {
+		case USER_UPDATE_REQUEST:
+			return { loading: true };
+		case USER_UPDATE_SUCCESS:
+			return { loading: false, success: true };
+		case USER_UPDATE_FAILURE:
+			return { loading: false, error: action.payload };
+		case USER_UPDATE_RESET:
+			return {};
 		default:
 			return state;
 	}

@@ -157,18 +157,22 @@ function Row(props) {
 }
 
 const ProductListScreen = (props) => {
+	const sellerMode = props.match.path.indexOf('/seller') >= 0;
 	const [ page, setPage ] = React.useState(0);
 	const [ rowsPerPage, setRowsPerPage ] = React.useState(10);
 
 	const productList = useSelector((state) => state.productList);
-	const { loading, error, products } = productList;
+	const { isLoading, error, products } = productList;
 	const dispatch = useDispatch();
+
+	const userSignIn = useSelector((state) => state.userSignIn);
+	const { userInfo } = userSignIn;
 
 	React.useEffect(
 		() => {
-			dispatch(listProducts());
+			dispatch(listProducts({ seller: sellerMode ? userInfo._id : '' }));
 		},
-		[ dispatch ]
+		[ dispatch, sellerMode, userInfo._id ]
 	);
 
 	// Avoid a layout jump when reaching the last page with empty rows.
@@ -186,7 +190,7 @@ const ProductListScreen = (props) => {
 	return (
 		<div>
 			<DrawerHeader />
-			{loading ? (
+			{isLoading ? (
 				<div className="loader-div">
 					<Loading />
 				</div>
