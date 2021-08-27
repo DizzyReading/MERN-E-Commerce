@@ -30,6 +30,7 @@ userRouter.post(
 					name: user.name,
 					email: user.email,
 					isAdmin: user.isAdmin,
+					isSeller: user.isSeller,
 					token: generateToken(user)
 				});
 				return;
@@ -63,6 +64,7 @@ userRouter.post(
 				name: createdNewUser.name,
 				email: createdNewUser.email,
 				isAdmin: createdNewUser.isAdmin,
+				isSeller: createdNewUser.isSeller,
 				token: generateToken(createdNewUser)
 			});
 		}
@@ -83,6 +85,8 @@ userRouter.get(
 		}
 	})
 );
+
+// Update User Profile Details
 
 userRouter.put(
 	'/profile',
@@ -105,11 +109,14 @@ userRouter.put(
 				_id: updatedUser._id,
 				name: updatedUser.name,
 				isAdmin: updatedUser.isAdmin,
+				isSeller: updatedUser.isSeller,
 				token: generateToken(updatedUser)
 			});
 		}
 	})
 );
+
+// Get List of users in Users collection as Admin
 
 userRouter.get(
 	'/',
@@ -121,6 +128,8 @@ userRouter.get(
 		res.send(users);
 	})
 );
+
+// Delete a User as Admin
 
 userRouter.delete(
 	'/:id',
@@ -135,6 +144,34 @@ userRouter.delete(
 			}
 			const deleteUser = await user.remove();
 			res.send({ message: 'User Deleted', user: deleteUser });
+		} else {
+			res.status(404).send({ message: 'User Not Found' });
+		}
+	})
+);
+
+// Designate a User to Admin or Seller as Admin
+
+userRouter.put(
+	'/:id',
+	isAuth,
+	isAdmin,
+	expressAsyncHandler(async (req, res) => {
+		const checkIfUserHasSameEmailAsAnotherInDB = await User.findOne({ email: req.body.email });
+
+		const user = await User.findById(req.params.id);
+
+		if (checkIfUserHasSameEmailAsAnotherInDB) {
+			if (bcrypt.compare(req.body.email, checkIfUserHasSameEmailAsAnotherInDB.email)) {
+				res.status(401).send({ message: 'Email already in use.' });
+			}
+		} else if (user) {
+			user.name = req.body.name || user.name;
+			user.email = req.body.email || user.email;
+			user.isSeller = Boolean(req.body.isSeller);
+			user.isAdmin = Boolean(req.body.isAdmin);
+			const updatedUser = await user.save();
+			res.send({ message: 'User Updated', user: updatedUser });
 		} else {
 			res.status(404).send({ message: 'User Not Found' });
 		}

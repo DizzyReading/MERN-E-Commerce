@@ -1,13 +1,17 @@
 import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
-const productSchema = new Schema(
+const productSchema = new mongoose.Schema(
 	{
 		name: {
 			type: String,
 			required: true,
 			unique: true
+		},
+		seller: {
+			type: mongoose.Schema.Types.ObjectID,
+			required: true
 		},
 		category: {
 			type: String,
