@@ -27,6 +27,22 @@ body {
 	height: 100vh;
 }
 
+/* .username,
+.seller,
+.admin {
+	margin: 5px;
+} */
+
+@media (max-width: 769px) {
+	.username,
+	.seller,
+	.admin {
+		visibility: hidden;
+		display: none;
+		margin: 0;
+	}
+}
+
 @media (max-width: 415px) {
 	#root {
 		padding: 1rem;

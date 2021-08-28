@@ -30,7 +30,7 @@ import { listProducts } from '../redux/actions/productAction';
 import Button from '@material-ui/core/Button';
 import { deleteUser, listUsers } from '../redux/actions/userAction';
 import swal from 'sweetalert';
-import { USER_DELETE_RESET, USER_DETAILS_RESET } from '../redux/constants/userConstant';
+import { USER_DETAILS_RESET } from '../redux/constants/userConstant';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',

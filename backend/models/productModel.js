@@ -9,10 +9,10 @@ const productSchema = new mongoose.Schema(
 			required: true,
 			unique: true
 		},
-		seller: {
-			type: mongoose.Schema.Types.ObjectID,
-			required: true
-		},
+		// seller: {
+		// 	type: mongoose.Schema.Types.ObjectID,
+		// 	required: true
+		// },
 		category: {
 			type: String,
 			required: true

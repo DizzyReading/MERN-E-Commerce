@@ -15,6 +15,8 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import { css, cx } from '@emotion/css';
+import { Link } from 'react-router-dom';
+
 
 const DropDownSeller = ({ userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
@@ -57,8 +59,8 @@ const DropDownSeller = ({ userInfo }) => {
 	// console.log(userInfo, userInfo.isAdmin);
 
 	return (
-		<div>
-			<Button
+		<>
+			{/* <Button
 				color="secondary"
 				variant="text"
 				ref={anchorRef}
@@ -68,9 +70,37 @@ const DropDownSeller = ({ userInfo }) => {
 				aria-haspopup="true"
 				onClick={handleToggle}
 			>
-				Seller
-				<SiSellfy className={css`margin-left: 3px;`} />
-			</Button>
+				<p className="seller"> Seller</p>
+				<SiSellfy
+					className={css`
+						margin-left: 3px;
+						height: 1.5em;
+						width: 1.5em;
+					`}
+				/>
+			</Button> */}
+
+<Link
+		
+				className={css`display: flex;`}
+				color="secondary"
+				variant="text"
+				ref={anchorRef}
+				id="composition-button"
+				aria-controls={open ? 'composition-menu' : undefined}
+				aria-expanded={open ? 'true' : undefined}
+				aria-haspopup="true"
+				onClick={handleToggle}
+			>
+				<p className="seller">Seller</p>
+				<SiSellfy
+					className={css`
+						margin-left: 3px;
+						height: 1.5em;
+						width: 1.5em;
+					`}
+				/>
+			</Link>
 			<Popper
 				open={open}
 				anchorEl={anchorRef.current}
@@ -112,7 +142,7 @@ const DropDownSeller = ({ userInfo }) => {
 					</Grow>
 				)}
 			</Popper>
-		</div>
+		</>
 	);
 };
 

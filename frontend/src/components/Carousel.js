@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -9,39 +9,9 @@ import { CgChevronLeftO } from 'react-icons/cg';
 import ParallaxSlide from './ParallaxSlide';
 import DotIndicator from './DotIndicator';
 import { useArrowDarkButtonStyles } from '@mui-treasury/styles/button/arrowDark';
+import SwipeableViews from 'react-swipeable-views';
 
-
-// const useArrowDarkButtonStyles = ({ breakpoints }) => ({
-// 	root: {
-// 		borderRadius: '50%',
-// 		border: '1px solid',
-// 		width: 40,
-// 		minWidth: 40,
-// 		height: 40,
-// 		'& $label': {
-// 			transition: '0.3s cubic-bezier(.47,1.64,.41,.8)'
-// 		},
-// 		'&:hover': {
-// 			'& $label': {
-// 				transform: 'scale(1.3)',
-// 				[breakpoints.up('md')]: {
-// 					transform: 'scale(1.7)'
-// 				}
-// 			}
-// 		},
-// 		[breakpoints.up('sm')]: {
-// 			width: 48,
-// 			minWidth: 48,
-// 			height: 48
-// 		},
-// 		[breakpoints.up('md')]: {
-// 			width: 64,
-// 			minWidth: 64,
-// 			height: 64
-// 		}
-// 	},
-// 	label: {}
-// });
+// import Pagination from '@material-ui/core/Pagination';
 
 
 
@@ -186,7 +156,9 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 }));
 
 
+
 const Carousel = () => {
+  
   const classes = useStyles();
   const arrowStyles = useArrowDarkButtonStyles();
   const createStyle = (slideIndex, fineIndex) => {
@@ -196,6 +168,8 @@ const Carousel = () => {
       transform: `rotateY(${(-diff + 1) * 45}deg)`,
     };
   };
+
+  
   // eslint-disable-next-line react/prop-types
   const renderElements = ({ index, onChangeIndex }) => (
     <>
@@ -249,11 +223,13 @@ const Carousel = () => {
       </div>
     ));
   return (
+      // <AutoPlaySwipeableViews index={index} onChangeIndex={handleChangeIndex}>
     <div className={classes.root}>
       <ParallaxSlide renderElements={renderElements}>
         {renderChildren}
       </ParallaxSlide>
     </div>
+      // </AutoPlaySwipeableViews>
   );
 };
 

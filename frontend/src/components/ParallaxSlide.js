@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+
 const calculateMargin = (selfIndex, slideIndex, speed = 50) => {
   const diff = selfIndex - slideIndex;
   if (Math.abs(diff) > 1) return 0;
@@ -21,26 +26,35 @@ const ParallaxSlide = ({ transition, children, renderElements, ...props }) => {
     }),
   });
   const isSingleView = views.length < 2;
+
+  // const  handleChangeIndex = index => {
+  //   setIndex(index);
+  // };
+
+
+
   return (
     <>
-      <SwipeableViews
+    <AutoPlaySwipeableViews index={index} onChangeIndex={onChangeIndex}>
+      {/* <SwipeableViews
         disabled={isSingleView}
-        resistance
-        springConfig={{
-          duration: '0.6s',
-          easeFunction: '',
-          delay: '0s',
-        }}
-        enableMouseEvents
-        {...props}
-        index={index}
-        onChangeIndex={onChangeIndex}
-        onSwitching={i => {
-          setFineIndex(i);
-        }}
-      >
+        // resistance
+        // springConfig={{
+        //   duration: '0.6s',
+        //   easeFunction: '',
+        //   delay: '0s',
+        // }}
+        // enableMouseEvents
+        // {...props}
+        // index={index}
+        // onChangeIndex={onChangeIndex}
+        // onSwitching={i => {
+        //   setFineIndex(i);
+        // }}
+      > */}
         {views}
-      </SwipeableViews>
+      {/* </SwipeableViews> */}
+      </AutoPlaySwipeableViews>
       {!isSingleView && renderElements({ index, onChangeIndex })}
     </>
   );

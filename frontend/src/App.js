@@ -120,6 +120,7 @@ function App(props) {
 									/>
 								</Badge>
 							</Link>
+
 							{userInfo ? (
 								<Dropdown
 									userProfileHandler={() => (document.location.href = '/userprofile')}

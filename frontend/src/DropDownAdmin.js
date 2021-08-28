@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { RiProductHuntLine } from 'react-icons/ri';
 import { BiBox } from 'react-icons/bi';
 import { FiUsers } from 'react-icons/fi';
-import { RiAdminLine } from 'react-icons/ri';
+import { RiAdminFill } from 'react-icons/ri';
 import { AiOutlineDashboard } from 'react-icons/ai';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -14,6 +14,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
+import { Link } from 'react-router-dom';
+import { css, cx } from '@emotion/css';
 
 const DropDownAdmin = ({ userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
@@ -57,7 +59,7 @@ const DropDownAdmin = ({ userInfo }) => {
 
 	return (
 		<div>
-			<Button
+			{/* <Button
 				color="secondary"
 				variant="text"
 				ref={anchorRef}
@@ -69,7 +71,29 @@ const DropDownAdmin = ({ userInfo }) => {
 			>
 				Admin
 				<RiAdminLine />
-			</Button>
+			</Button> */}
+
+			<Link
+				className={css`display: flex;`}
+				color="secondary"
+				variant="text"
+				ref={anchorRef}
+				id="composition-button"
+				aria-controls={open ? 'composition-menu' : undefined}
+				aria-expanded={open ? 'true' : undefined}
+				aria-haspopup="true"
+				onClick={handleToggle}
+			>
+				<p className="admin">Admin</p>
+				<RiAdminFill
+					className={css`
+						margin-left: 3px;
+						height: 1.5em;
+						width: 1.5em;
+					`}
+				/>
+			</Link>
+
 			<Popper
 				open={open}
 				anchorEl={anchorRef.current}

@@ -4,7 +4,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { CgProfile } from 'react-icons/cg';
 import { IoMdGift } from 'react-icons/io';
-import { BsCaretDownFill } from 'react-icons/bs';
+// import { BsCaretDownFill } from 'react-icons/bs';
+import { RiUserFill } from 'react-icons/ri';
 import { RiAdminLine } from 'react-icons/ri';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -15,6 +16,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import MenuList from '@material-ui/core/MenuList';
 import { css, cx } from '@emotion/css';
+import { Link } from 'react-router-dom';
 
 const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, userInfo }) => {
 	const [ open, setOpen ] = React.useState(false);
@@ -57,8 +59,20 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 	// console.log(userInfo, userInfo.isAdmin);
 
 	return (
-		<div>
-			<Button
+		<>
+			{/* <Button
+				color="secondary"
+				variant="text"
+				ref={anchorRef}
+				id="composition-button"
+				aria-controls={open ? 'composition-menu' : undefined}
+				aria-expanded={open ? 'true' : undefined}
+				aria-haspopup="true"
+				onClick={handleToggle}
+			> */}
+			<Link
+		
+				className={css`display: flex;`}
 				color="secondary"
 				variant="text"
 				ref={anchorRef}
@@ -68,9 +82,16 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 				aria-haspopup="true"
 				onClick={handleToggle}
 			>
-				{userInfo.name}
-				<BsCaretDownFill className={css`margin-left: 3px;`} />
-			</Button>
+				<p className="username">{userInfo.name}</p>
+				<RiUserFill
+					className={css`
+						margin-left: 3px;
+						height: 1.5em;
+						width: 1.5em;
+					`}
+				/>
+			</Link>
+			{/* </Button> */}
 			<Popper
 				open={open}
 				anchorEl={anchorRef.current}
@@ -118,7 +139,7 @@ const Dropdown = ({ userProfileHandler, orderHistoryHandler, signOutHandler, use
 					</Grow>
 				)}
 			</Popper>
-		</div>
+		</>
 	);
 };
 
