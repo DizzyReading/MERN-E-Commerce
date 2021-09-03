@@ -5,7 +5,7 @@ import userRouter from "./routes/userRoutes.js";
 import dotenv from "dotenv";
 import orderRouter from "./routes/orderRoutes.js";
 import morgan from "morgan";
-const path = require("path");
+import path from "path";
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ const dbURI =
 // connect to MongoDB
 
 mongoose
-  .connect(process.env.MONGODB_URL || "mongodb://localhost/MERN-E-Commerce", {
+  .connect(process.env.MONGODB_URL || dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
