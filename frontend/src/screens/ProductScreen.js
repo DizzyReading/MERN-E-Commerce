@@ -13,7 +13,7 @@ import MessageBox from '../components/MessageBox'
 import { useState, useEffect } from 'react';
 import { detailsProduct } from '../redux/actions/productAction';
 import { NativeSelect, FormControl } from '@material-ui/core';
-import Modal from 'react-modal';
+
 import { css, cx } from '@emotion/css';
 
 

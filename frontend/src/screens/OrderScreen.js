@@ -1,3 +1,4 @@
+import React from 'react';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 import { styled } from '@material-ui/core/styles';
@@ -14,6 +15,7 @@ import { detailsOrder, payOrder } from '../redux/actions/orderActions';
 import { ORDER_PAY_RESET } from '../redux/constants/orderConstants';
 import Spinner from '../components/Spinner';
 import swal from 'sweetalert';
+import { useRef } from 'react';
 
 const useStyles = makeStyles({
 	root: {
@@ -44,6 +46,7 @@ const OrderScreen = (props) => {
 	const { userInfo } = userSignIn;
 	const orderPay = useSelector((state) => state.orderPay);
 	const { loading: loadingPay, error: errorPay, success: successPay } = orderPay;
+	const [ click, setClick ] = useState(false);
 	const dispatch = useDispatch();
 
 	useEffect(
@@ -78,23 +81,35 @@ const OrderScreen = (props) => {
 
 	const successPaymentHandler = (paymentResult) => {
 		dispatch(payOrder(order, paymentResult));
+		setClick(true);
 	};
 
-	if (successPay) {
-		swal({
-			title: 'Order Successful!',
-			icon: 'success'
-		})
-			.then((res) => {
-				if (res) {
-					console.log('Order Successful');
-				}
-			})
-			.catch((error) => {
-				swal('Oops!', 'Something went wrong!', 'error');
-			});
-		swal.close();
+	if (order) {
+		if (click) {
+			// setClick(false);
+
+			if (order.isPaid) {
+				swal({
+					title: 'Order Successful!',
+					icon: 'success'
+				})
+					.then((res) => {
+						if (res) {
+							console.log('Order Successful');
+						}
+					})
+					.catch((error) => {
+						swal('Oops!', 'Something went wrong!', 'error');
+					});
+
+				setClick(false);
+			}
+		}
 	}
+
+	console.log('OrderScreen', order);
+	console.log('OrderScreen', successPay);
+	console.log('click', click);
 
 	return (
 		<div>
@@ -344,4 +359,4 @@ const OrderScreen = (props) => {
 	);
 };
 
-export default OrderScreen;
+export default React.memo(OrderScreen);

@@ -19,7 +19,7 @@ orderRouter.get(
 	'/mine',
 	isAuth,
 	expressAsyncHandler(async (req, res) => {
-		const orders = await Order.find({ user: req.user._id });
+		const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
 		res.send(orders);
 	})
 );
@@ -81,6 +81,8 @@ orderRouter.put(
 		} else {
 			res.status(404).send({ message: 'Order Not Found' });
 		}
+
+		// res.status(404).send({ message: 'Order Not Found' });
 	})
 );
 
