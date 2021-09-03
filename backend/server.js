@@ -26,7 +26,7 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    app.listen(5000, () => {
+    app.listen(port, () => {
       console.log(`Serve at http://localhost:${port}`);
     });
   });
