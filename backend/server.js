@@ -8,6 +8,7 @@ import morgan from "morgan";
 import path from "path";
 
 dotenv.config();
+const port = process.env.PORT || 5000;
 
 // express app
 
@@ -66,5 +67,3 @@ app.get("*", (req, res) =>
 app.use((err, req, res, next) => {
   res.status(500).send(err.message);
 });
-
-const port = process.env.PORT || 5000;
