@@ -5,6 +5,7 @@ import userRouter from "./routes/userRoutes.js";
 import dotenv from "dotenv";
 import orderRouter from "./routes/orderRoutes.js";
 import morgan from "morgan";
+import path from "path";
 
 dotenv.config();
 
@@ -34,13 +35,13 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-// app.use(cors);
 
 // Routes
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
+const __dirname = path.resolve();
 
 // Serving static files
 
