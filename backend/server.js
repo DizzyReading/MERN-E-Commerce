@@ -5,13 +5,14 @@ import userRouter from "./routes/userRoutes.js";
 import dotenv from "dotenv";
 import orderRouter from "./routes/orderRoutes.js";
 import morgan from "morgan";
-import path from "path";
+const path = require("path");
 
 dotenv.config();
 
-// express app
+// express app & port
 
 const app = express();
+const port = process.env.PORT || 5000;
 
 const dbURI =
   "mongodb+srv://polka:teamkrillpolka@ecommerce.tc8kz.mongodb.net/Thriftshop?retryWrites=true&w=majority";
@@ -19,7 +20,7 @@ const dbURI =
 // connect to MongoDB
 
 mongoose
-  .connect(process.env.MONGODB_URL || dbURI, {
+  .connect(process.env.MONGODB_URL || "mongodb://localhost/MERN-E-Commerce", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -66,5 +67,3 @@ app.get("/", (req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).send(err.message);
 });
-
-const port = process.env.PORT || 5000;
