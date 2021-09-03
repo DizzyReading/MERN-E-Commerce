@@ -42,15 +42,22 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", orderRouter);
 
+// Serving static files
+
+app.use(express.static(path.join(__dirname, "/frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/build/index.html"));
+});
+
 // PAYPAL
 
 app.get("/api/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
 
-app.get("/", (req, res) => {
-  res.send("Server is ready!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Server is ready!");
+// });
 
 // expressAsyncHandler
 
